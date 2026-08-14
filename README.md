@@ -127,15 +127,49 @@ part:
   distractor as its entire context, the model answers instead of declining, and drops to
   0.014.
 
-The honest summary: retrieval is fast and the harness is sound, but this benchmark is
-currently measuring Mistral-7B's answer formatting and temporal reasoning far more than it is
-measuring Engram. A meaningfully better number needs a different answer model or a prompt that
-forces short phrases — not better recall. Both would be departures from the paper's protocol,
-which is why neither is baked in here.
-
 Numbers above are the raw completions, exactly as the official scorer sees them. The
 first-sentence figure is quoted once, explicitly labelled, and is *not* the protocol —
 `oracle_locomo.py` reports it alongside the raw score purely to separate "wrong" from "wordy".
+
+### Measuring retrieval on its own — where it turns out Engram is actually weak
+
+F1 and the oracle both describe the *pipeline*. Neither says whether Engram returns the right
+memories, so `scripts/recall_locomo.py` measures that directly: every LoCoMo question ships
+the dialog turns that support it, those turns were ingested one memory each, so a retrieved
+memory maps back to a turn id by exact text match and can be checked against the gold set. No
+answer model, no F1. Search-only, so it re-runs in minutes against an already-ingested
+conversation.
+
+Over the same 304 questions (381 gold evidence turns):
+
+| cutoff | hit@k | recall@k |
+|---|---|---|
+| k=1 | 0.083 | 0.078 |
+| **k=5** (what the eval uses) | **0.255** | **0.233** |
+| k=10 | 0.371 | 0.338 |
+| k=20 | 0.566 | 0.517 |
+
+**This corrects the reading above.** At the top_k=5 the eval actually runs at, Engram surfaces
+at least one gold evidence turn for only 25% of questions. Retrieval is not fine — it was
+simply never the *visible* constraint, because an answer model capped at 0.19 F1 hides a
+retriever operating at 0.23 recall. Both are real, and F1 alone could not have told them apart.
+
+The useful detail is where the right memory lands when it isn't in the top 5. Of the 171
+questions whose gold evidence appears anywhere in the top 20, the median rank of the first
+correct hit is **7** — just past the cutoff. So the relevant memories are usually *in* the
+index and ranked plausibly; they are being ranked a few positions too low. That is a ranking
+problem in the semantic/temporal/frequency blend, not a recall-from-storage problem, and it is
+the most actionable thing on this page.
+
+Per category at k=20, temporal recall is the *highest* (0.714) while temporal F1 is 0.139 —
+retrieval hands the model the right turns and the model still answers "yesterday". The two
+failures are independent.
+
+The honest summary: this benchmark is measuring Mistral-7B's answer formatting and temporal
+reasoning far more than it is measuring Engram, *and* Engram's ranking is genuinely weak at
+k=5. Fixing either alone moves the headline number very little — the answer model caps it near
+0.19 and the retriever caps it near 0.23 recall. That is worth stating plainly rather than
+picking whichever half flatters the project.
 
 The eval deliberately calls `bedrock_client.invoke_chat` directly rather than `/v1/chat`, so
 Engram's own prompt template and its `(relevance=0.70)` debug annotations don't contaminate
@@ -205,9 +239,13 @@ Stated plainly rather than hidden:
 - LoCoMo has been run on two conversations out of ten (304 of 1,986 questions). The oracle
   diagnostic now exists and says the answer model, not retrieval, is the ceiling — so the
   remaining eight conversations would sharpen the estimate without changing that conclusion.
-- Nothing in the eval isolates *retrieval* quality on its own. F1 is an end-to-end score, so
-  a recall@k measured against the dataset's `evidence` labels would say far more about Engram
-  specifically than the headline number does.
+- Retrieval ranking is weak at the k the eval uses: recall@5 is 0.233, and the median rank of
+  the first correct memory is 7. The score blend has not been tuned at all — the weights in
+  `memory_pipeline` were picked by hand and never evaluated against `recall_locomo.py`, which
+  now exists precisely to do that.
+- Raising `--top-k` is the obvious next experiment and hasn't been run. recall@20 is 0.517,
+  more than double recall@5, but whether feeding 20 memories to a 7B model improves its answers
+  or just distracts it is an open question.
 - No load testing, no HA or backup story for the three stateful stores.
 - No SDK — integration is raw HTTP today.
 - No billing or per-tenant metering (metrics are aggregate-only by design; it would have to
