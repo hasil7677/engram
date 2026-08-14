@@ -257,9 +257,15 @@ Stated plainly rather than hidden:
   prompt. Nothing here has measured the token cost of that, and for a real deployment the
   prompt-size bill would likely matter more than the latency.
 - Only Mistral-7B has been tried as the answer model, so nothing here separates "Engram
-  retrieves badly" from "this model answers badly" at the top end. Re-running
-  `oracle_locomo.py` against a stronger model would settle it cheaply — it needs no services,
-  and the oracle path is the one where the answer model is the only variable.
+  retrieves badly" from "this model answers badly" at the top end. `oracle_locomo.py --model`
+  exists to settle this — it needs no services, and the oracle path is the one where the
+  answer model is the only variable. The run is currently blocked outside the code: every
+  Anthropic model on the Bedrock account this was built against returns
+  `AccessDeniedException: INVALID_PAYMENT_INSTRUMENT`, so the comparison is one command away
+  from being answerable rather than one experiment away from being designed.
+- Bedrock note for anyone re-running this: on-demand invocation of current Anthropic models
+  needs an *inference profile* id (`au.…` / `global.…`), not the bare model id that
+  `list_foundation_models` returns. Bare ids fail with "on-demand throughput isn't supported".
 - No load testing, no HA or backup story for the three stateful stores.
 - No SDK — integration is raw HTTP today.
 - No billing or per-tenant metering (metrics are aggregate-only by design; it would have to

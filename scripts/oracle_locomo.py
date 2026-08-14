@@ -71,13 +71,17 @@ def build_turn_index(conv: dict) -> dict[str, str]:
     return index
 
 
-def run_sample(sample: dict, max_tokens: int) -> dict:
+def run_sample(sample: dict, max_tokens: int, model_id: str | None = None) -> dict:
     sample_id = sample["sample_id"]
     turns = build_turn_index(sample["conversation"])
     results = []
 
     print(f"[{sample_id}] oracle-answering {len(sample['qa'])} questions "
-          f"(max_tokens={max_tokens}, context = gold evidence turns only)...")
+          f"(max_tokens={max_tokens}, model={model_id or 'BEDROCK_MODEL_ID'}, "
+          f"context = gold evidence turns only)...")
+
+    n_errors = 0
+    consecutive_errors = 0
 
     for i, q in enumerate(sample["qa"]):
         evidence = [turns[e] for e in q.get("evidence", []) if e in turns]
@@ -85,11 +89,26 @@ def run_sample(sample: dict, max_tokens: int) -> dict:
         template = QA_PROMPT_CAT_5 if q["category"] == 5 else QA_PROMPT
         prompt = context + "\n" + template.format(q["question"])
         try:
-            answer = invoke_chat(prompt, max_tokens=max_tokens).strip()
+            answer = invoke_chat(prompt, max_tokens=max_tokens, model_id=model_id).strip()
             f1_raw = score_qa(q, answer)
             f1_trimmed = score_qa(q, trim(answer))
+            consecutive_errors = 0
         except Exception as exc:
+            # A failed call is NOT a wrong answer. Scoring it 0.0 and continuing
+            # is how a run where every single Bedrock call was rejected still
+            # printed a tidy "OVERALL 0.0000" table that looked like a result --
+            # a model with no answers and a model with no access are
+            # indistinguishable once both are 0.0. Bail out instead: if the
+            # first few calls all fail it is a config or access problem, not
+            # something 100 more calls will fix.
             answer, f1_raw, f1_trimmed = f"ERROR: {exc}", 0.0, 0.0
+            n_errors += 1
+            consecutive_errors += 1
+            if consecutive_errors >= 5:
+                raise RuntimeError(
+                    f"[{sample_id}] aborting: {consecutive_errors} consecutive model calls failed. "
+                    f"This is an access/config problem, not a score. Last error: {exc}"
+                ) from exc
         results.append({
             "category": q["category"], "question": q["question"],
             "gold": q.get("answer", q.get("adversarial_answer", "")),
@@ -99,7 +118,12 @@ def run_sample(sample: dict, max_tokens: int) -> dict:
         if (i + 1) % 20 == 0:
             print(f"[{sample_id}]   {i + 1}/{len(sample['qa'])} done")
 
-    return {"sample_id": sample_id, "max_tokens": max_tokens, "mode": "oracle", "results": results}
+    if n_errors:
+        print(f"[{sample_id}] WARNING: {n_errors}/{len(results)} calls failed and are scored 0.0 -- "
+              f"the numbers below understate the model")
+
+    return {"sample_id": sample_id, "max_tokens": max_tokens, "mode": "oracle",
+            "model": model_id, "n_errors": n_errors, "results": results}
 
 
 def report(all_results: list[dict]) -> None:
@@ -136,6 +160,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--samples", type=str, default="conv-30", help="comma-separated sample_ids")
     parser.add_argument("--max-tokens", type=int, default=128)
+    parser.add_argument("--model", type=str, default=None,
+                        help="Bedrock model to answer with, overriding BEDROCK_MODEL_ID. On Bedrock "
+                             "this must be an inference-profile id (e.g. au.anthropic.claude-"
+                             "sonnet-4-5-20250929-v1:0) -- bare model ids are not invocable on-demand.")
     parser.add_argument("--out", type=str, default=None, help="write full per-question results as JSON")
     args = parser.parse_args()
 
@@ -145,7 +173,7 @@ def main():
     if not samples:
         sys.exit(f"no samples matched {sorted(wanted)}")
 
-    all_results = [run_sample(s, args.max_tokens) for s in samples]
+    all_results = [run_sample(s, args.max_tokens, args.model) for s in samples]
     report(all_results)
 
     if args.out:

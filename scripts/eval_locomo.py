@@ -174,13 +174,25 @@ def run_sample(sample: dict, top_k: int, pace_seconds: float, rate_limit_per_min
         print(f"[{sample_id}] ingested {n_turns} turns in {ingest_time:.0f}s")
 
     results = []
+    n_errors = consecutive_errors = 0
     print(f"[{sample_id}] answering {len(sample['qa'])} QA questions...")
     for i, q in enumerate(sample["qa"]):
         try:
             answer, retrieval_latency = answer_question(api_key, user_id, q, top_k, max_tokens)
             f1 = score_qa(q, answer)
+            consecutive_errors = 0
         except Exception as exc:
+            # A failed call is not a wrong answer -- see the same guard in
+            # oracle_locomo.py. Scoring errors 0.0 and carrying on turns a total
+            # outage into a plausible-looking low score.
             answer, retrieval_latency, f1 = f"ERROR: {exc}", 0.0, 0.0
+            n_errors += 1
+            consecutive_errors += 1
+            if consecutive_errors >= 5:
+                raise RuntimeError(
+                    f"[{sample_id}] aborting: {consecutive_errors} consecutive questions failed. "
+                    f"This is an access/config problem, not a score. Last error: {exc}"
+                ) from exc
         results.append({
             "category": q["category"], "question": q["question"],
             "gold": q.get("answer", q.get("adversarial_answer", "")),
@@ -190,7 +202,12 @@ def run_sample(sample: dict, top_k: int, pace_seconds: float, rate_limit_per_min
             print(f"[{sample_id}]   {i + 1}/{len(sample['qa'])} done")
         time.sleep(pace_seconds)
 
-    return {"sample_id": sample_id, "n_turns": n_turns, "ingest_time": ingest_time, "results": results}
+    if n_errors:
+        print(f"[{sample_id}] WARNING: {n_errors}/{len(results)} questions failed and are scored 0.0 -- "
+              f"the numbers below understate the pipeline")
+
+    return {"sample_id": sample_id, "n_turns": n_turns, "ingest_time": ingest_time,
+            "n_errors": n_errors, "results": results}
 
 
 def report(all_results: list[dict]) -> None:

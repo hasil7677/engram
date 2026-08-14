@@ -19,16 +19,21 @@ def get_bedrock_client():
     return _client
 
 
-def invoke_chat(prompt: str, max_tokens: int = 512) -> str:
+def invoke_chat(prompt: str, max_tokens: int = 512, model_id: str | None = None) -> str:
     """One-shot chat completion via Bedrock's model-agnostic Converse API —
     works the same way regardless of which model provider BEDROCK_MODEL_ID points at.
+
+    model_id overrides BEDROCK_MODEL_ID for a single call. Production never passes
+    it; the LoCoMo oracle uses it to answer the same questions with a different
+    model over an otherwise identical code path, which is what makes the
+    answer-model comparison meaningful rather than a rewrite.
     """
     client = get_bedrock_client()
     bedrock_calls_total.inc()
     try:
         with bedrock_call_latency_seconds.time():
             response = client.converse(
-                modelId=settings.bedrock_model_id,
+                modelId=model_id or settings.bedrock_model_id,
                 messages=[{"role": "user", "content": [{"text": prompt}]}],
                 inferenceConfig={"maxTokens": max_tokens, "temperature": 0},
             )
