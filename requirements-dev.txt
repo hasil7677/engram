@@ -1,3 +1,7 @@
 -r requirements.txt
 pytest==8.3.3
 httpx==0.27.2
+# benchmarks/locomo/official_scoring.py imports these; without them the LoCoMo
+# eval and oracle scripts fail at import time.
+regex==2024.9.11
+nltk==3.9.1

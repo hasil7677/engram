@@ -1,0 +1,849 @@
+[
+  {
+    "sample_id": "conv-30",
+    "n_turns": 369,
+    "ingest_time": 487.0775080999956,
+    "results": [
+      {
+        "category": 2,
+        "question": "When Jon has lost his job as a banker?",
+        "gold": "19 January, 2023",
+        "prediction": "Jon lost his job as a banker in January, 2023. (Based on the first message.)",
+        "f1": 0.25,
+        "retrieval_latency": 4.716308299997763
+      },
+      {
+        "category": 2,
+        "question": "When Gina has lost her job at Door Dash?",
+        "gold": "January, 2023",
+        "prediction": "Gina lost her job at Door Dash in January 2023 (mentioned in two separate conversations on January 20 and April 25).",
+        "f1": 0.18181818181818182,
+        "retrieval_latency": 0.383719999997993
+      },
+      {
+        "category": 4,
+        "question": "How do Jon and Gina both like to destress?",
+        "gold": "by dancing",
+        "prediction": "Jon may find encouragement and motivation from Gina's words, as evidenced by her repeated phrases like \"You've got this,\" \"Go for it,\" and \"Just do it.\" These phrases suggest that Jon may find stress relief through taking action and pursuing his goals with determination. Gina's support and belief in Jon's abilities may also help him to feel less stressed. However, the context does not provide direct evidence of how Gina personally destresses.",
+        "f1": 0.02898550724637681,
+        "retrieval_latency": 0.06955919999745674
+      },
+      {
+        "category": 1,
+        "question": "What do Jon and Gina both have in common?",
+        "gold": "They lost their jobs and decided to start their own businesses.",
+        "prediction": "They have each received encouragement and support from Gina. Examples include: \"Let's make a difference,\" \"Go for it,\" \"Go get 'em,\" \"Remember, Just do it,\" and \"No doubt, you've got this.\"",
+        "f1": 0.08695652173913043,
+        "retrieval_latency": 0.06771390000358224
+      },
+      {
+        "category": 4,
+        "question": "Why did Jon decide to start his dance studio?",
+        "gold": "He lost his job and decided to start his own business to share his passion.",
+        "prediction": "Jon started his dance studio out of a passion for dancing and a desire to share it with others. (4:04 pm on 20 January, 2023)",
+        "f1": 0.2777777777777778,
+        "retrieval_latency": 0.0495911000034539
+      },
+      {
+        "category": 1,
+        "question": "What Jon thinks the ideal dance studio should look like?",
+        "gold": "By the water, with natural light and Marley flooring",
+        "prediction": "Jon's ideal dance studio is by the water. (4:04 pm on 20 January, 2023)",
+        "f1": 0.14285714285714285,
+        "retrieval_latency": 0.07053660000383388
+      },
+      {
+        "category": 2,
+        "question": "When is Jon's group performing at a festival?",
+        "gold": "February, 2023",
+        "prediction": "Next month. (From the context on 4 February, 2023)",
+        "f1": 0.4,
+        "retrieval_latency": 0.0594420000052196
+      },
+      {
+        "category": 2,
+        "question": "When did Gina launch an ad campaign for her store?",
+        "gold": "29 January, 2023",
+        "prediction": "Gina launched an ad campaign for her store on an unspecified date in late July, 2023. (No exact date is mentioned in the context.)",
+        "f1": 0.08333333333333333,
+        "retrieval_latency": 0.05442159999802243
+      },
+      {
+        "category": 2,
+        "question": "When was Jon in Paris?",
+        "gold": "28 January 2023",
+        "prediction": "The context does not provide information on when Jon specifically went to Paris. The only mention of Paris is Gina expressing her desire to visit it.",
+        "f1": 0.0,
+        "retrieval_latency": 0.08914129999902798
+      },
+      {
+        "category": 1,
+        "question": "Which city have both Jean and John visited?",
+        "gold": "Rome",
+        "prediction": "Both Gina and Jon have visited Rome. (The context mentions that Gina had only been to Rome once.)",
+        "f1": 0.11764705882352941,
+        "retrieval_latency": 0.05543239999678917
+      },
+      {
+        "category": 2,
+        "question": "When did Gina team up with a local artist for some cool designs?",
+        "gold": "February, 2023",
+        "prediction": "Gina collaborated with a local artist in February 2023. (9:32 am on 8 February, 2023)",
+        "f1": 0.25,
+        "retrieval_latency": 0.12270030000217957
+      },
+      {
+        "category": 2,
+        "question": "When did Gina get her tattoo?",
+        "gold": "A few years ago",
+        "prediction": "Gina got her tattoo a few years ago. (9:32 am on 8 February, 2023)",
+        "f1": 0.375,
+        "retrieval_latency": 0.05397850000008475
+      },
+      {
+        "category": 2,
+        "question": "When did Jon start to go to the gym?",
+        "gold": "March, 2023",
+        "prediction": "There is no explicit mention of Jon going to the gym in the provided context.",
+        "f1": 0.0,
+        "retrieval_latency": 0.0496119000017643
+      },
+      {
+        "category": 2,
+        "question": "When did Gina open her online clothing store?",
+        "gold": "16 March, 2023",
+        "prediction": "Gina opened her online clothing store on 16 March, 2023. (Exact words from context)",
+        "f1": 0.35294117647058826,
+        "retrieval_latency": 0.0475843000021996
+      },
+      {
+        "category": 2,
+        "question": "When did Jon start expanding his studio's social media presence?",
+        "gold": "April, 2023",
+        "prediction": "Jon expressed interest in having help with his studio's social media in July 23, 2023. (\"Sounds great. I'd really appreciate your help with making content and managing my social media.\")",
+        "f1": 0.06451612903225806,
+        "retrieval_latency": 0.05748429999948712
+      },
+      {
+        "category": 2,
+        "question": "When did Jon host a dance competition?",
+        "gold": "May, 2023",
+        "prediction": "There is no mention of Jon hosting a dance competition in the given context.",
+        "f1": 0.0,
+        "retrieval_latency": 0.05533650000143098
+      },
+      {
+        "category": 2,
+        "question": "When did Jon go to a fair to get more exposure for his dance studio?",
+        "gold": "24 April, 2023",
+        "prediction": "There is no mention of Jon going to a fair in the context provided.",
+        "f1": 0.0,
+        "retrieval_latency": 0.07362940000166418
+      },
+      {
+        "category": 1,
+        "question": "Why did Gina decide to start her own clothing store?",
+        "gold": "She always loved fashion trends and finding unique pieces and she lost her job so decided it was time to start her own business.",
+        "prediction": "Gina started her own clothing store out of courage and excitement, despite the challenges and risks involved. (Combining messages from 29 January and 23 March)",
+        "f1": 0.18749999999999997,
+        "retrieval_latency": 0.06733839999651536
+      },
+      {
+        "category": 1,
+        "question": "Do Jon and Gina start businesses out of what they love?",
+        "gold": "Yes",
+        "prediction": "Yes, based on the context, Jon and Gina appear to be starting businesses and working together on projects that they are passionate about. Gina's encouragement and support for Jon suggests that they share a common drive and commitment to their endeavors. (\"Let's make a difference and show 'em what we got,\" \"Remember Jon, Just do it!,\" \"Staying resilient and focused is key for any entrepreneur,\" \"The store's doing great! It's a wild ride,\" \"Impressed by your commitment\").",
+        "f1": 1.0,
+        "retrieval_latency": 0.06789249999565072
+      },
+      {
+        "category": 2,
+        "question": "When did Gina interview for a design internship?",
+        "gold": "10 May, 2023",
+        "prediction": "Gina interviewed for a design internship on an unspecified date before 27 May, 2023. (No exact date is mentioned in the context.)",
+        "f1": 0.18181818181818182,
+        "retrieval_latency": 0.05535580000287155
+      },
+      {
+        "category": 2,
+        "question": "When did Gina get accepted for the design internship?",
+        "gold": "27 May, 2023",
+        "prediction": "Gina got accepted for the fashion internship on 27 May, 2023.",
+        "f1": 0.4615384615384615,
+        "retrieval_latency": 0.05851529999927152
+      },
+      {
+        "category": 2,
+        "question": "When did Jon start reading \"The Lean Startup\"?",
+        "gold": "May, 2023",
+        "prediction": "Jon started reading \"The Lean Startup\" on 27 May, 2023.",
+        "f1": 0.3636363636363636,
+        "retrieval_latency": 0.06306000000040513
+      },
+      {
+        "category": 2,
+        "question": "When did Gina develop a video presentation to teach how to style her fashion pieces? ",
+        "gold": "June, 2023",
+        "prediction": "Gina mentioned working on an online platform to show off her store's items, but there's no explicit statement about creating a video presentation for styling her fashion pieces.",
+        "f1": 0.0,
+        "retrieval_latency": 0.06608419999975013
+      },
+      {
+        "category": 1,
+        "question": "How did Gina promote her clothes store?",
+        "gold": "worked with an artist to make unique fashion pieces, made limited-edition sweatshirts, got some new offers and promotions for online store, developed a video presentation showing how to style her pieces",
+        "prediction": "Gina launched an ad campaign for her clothing store to grow the business. (29 January, 2023)",
+        "f1": 0.1168831168831169,
+        "retrieval_latency": 0.057250600002589636
+      },
+      {
+        "category": 1,
+        "question": "Which events has Jon participated in to promote his business venture?",
+        "gold": "fair, networking events, dance competition",
+        "prediction": "Jon mentioned attending an awesome event to promote his business and meet investors. (5:44 pm on 21 July, 2023)",
+        "f1": 0.037037037037037035,
+        "retrieval_latency": 0.07846889999927953
+      },
+      {
+        "category": 1,
+        "question": "What does Jon's dance studio offer?",
+        "gold": "one-on-one metoring and training to dancers,  workshops and classes to local schools and centers",
+        "prediction": "Jon's dance studio offers dancing lessons and is in the process of creating an online platform to showcase its offerings. (3:14 pm on 11 May, 2023 & 5:44 pm on 21 July, 2023)",
+        "f1": 0.07275132275132276,
+        "retrieval_latency": 0.051939300006779376
+      },
+      {
+        "category": 2,
+        "question": "When did Jon receive mentorship to promote his venture?",
+        "gold": "15 June, 2023",
+        "prediction": "Jon mentioned offering mentoring and training as part of his business plan as early as 13 June, 2023.",
+        "f1": 0.2,
+        "retrieval_latency": 0.05407600000035018
+      },
+      {
+        "category": 1,
+        "question": "Did Jon and Gina both participate in dance competitions?",
+        "gold": "Yes",
+        "prediction": "There is no direct mention of Jon and Gina participating in dance competitions together in the given context.",
+        "f1": 0.0,
+        "retrieval_latency": 0.05567789999622619
+      },
+      {
+        "category": 2,
+        "question": "When was Jon in Rome?",
+        "gold": "June 2023",
+        "prediction": "Gina mentioned she had only been to Rome once, but there's no mention of Jon's travel history to Rome in the context provided.",
+        "f1": 0.0,
+        "retrieval_latency": 0.0566532999946503
+      },
+      {
+        "category": 1,
+        "question": "Which cities has Jon visited?",
+        "gold": "Paris, Rome",
+        "prediction": "Jon has visited Rome once. (from the context on 29 January, 2023)",
+        "f1": 0.09090909090909091,
+        "retrieval_latency": 0.04652489999716636
+      },
+      {
+        "category": 2,
+        "question": "When Jon is planning to open his dance studio?",
+        "gold": "20 June, 2023",
+        "prediction": "Jon is currently in the process of opening his dance studio. (No exact date mentioned in the context.)",
+        "f1": 0.0,
+        "retrieval_latency": 0.056300099997315556
+      },
+      {
+        "category": 1,
+        "question": "How long did it take for Jon to open his studio?",
+        "gold": "six months",
+        "prediction": "From losing his job and starting his dream business to prepping for the studio, the time frame mentioned in the context is approximately 4 months (May to July, 2023).",
+        "f1": 0.14285714285714285,
+        "retrieval_latency": 0.06417879999935394
+      },
+      {
+        "category": 2,
+        "question": "When did Gina design a limited collection of hoodies?",
+        "gold": "June 2023",
+        "prediction": "Gina designed a limited collection of hoodies last week. (2:15 pm on 21 June, 2023)",
+        "f1": 0.25,
+        "retrieval_latency": 0.0633356000034837
+      },
+      {
+        "category": 2,
+        "question": "When did Jon visit networking events for his store?",
+        "gold": "20 June, 2023",
+        "prediction": "Jon mentioned visiting networking events for his store on March 16, 2023. (From: \"Congrats! That's awesome! What gave you the idea to start the online store?\")",
+        "f1": 0.07407407407407407,
+        "retrieval_latency": 0.062031500005105045
+      },
+      {
+        "category": 2,
+        "question": "When did Gina start being recognized by fashion editors?",
+        "gold": "July 2023",
+        "prediction": "Gina started being recognized by fashion editors after she came up with an idea for a unique fashion concept and worked with an artist to make it happen. (9:32 am on 8 February, 2023)",
+        "f1": 0.0625,
+        "retrieval_latency": 0.07207760000164853
+      },
+      {
+        "category": 2,
+        "question": "When did Jon start learning marketing and analytics tools?",
+        "gold": "July, 2023",
+        "prediction": "Jon didn't explicitly mention when he started learning marketing and analytics tools in the given context.",
+        "f1": 0.0,
+        "retrieval_latency": 0.06174109999847133
+      },
+      {
+        "category": 2,
+        "question": "When did Jon and Gina decide to collaborate to create dance content?",
+        "gold": "21 July 2023",
+        "prediction": "Jon and Gina expressed their excitement about collaborating on dance content in a conversation on July 21, 2023. (5:44 pm)",
+        "f1": 0.2857142857142857,
+        "retrieval_latency": 0.04467179999483051
+      },
+      {
+        "category": 2,
+        "question": "When did Gina mention Shia Labeouf?",
+        "gold": " 23 July, 2023",
+        "prediction": "Gina mentioned Shia Labeouf at 6:46 pm on 23 July, 2023.",
+        "f1": 0.42857142857142855,
+        "retrieval_latency": 0.06149089999962598
+      },
+      {
+        "category": 2,
+        "question": "When did Gina go to a dance class with a group of friends?",
+        "gold": "21 July 2023",
+        "prediction": "Gina mentioned looking forward to having fun at a dance studio with friends on 19 June, 2023.",
+        "f1": 0.10526315789473684,
+        "retrieval_latency": 0.0607151999938651
+      },
+      {
+        "category": 4,
+        "question": "What is Gina's favorite style of dance?",
+        "gold": "Contemporary",
+        "prediction": "Gina expresses her love for contemporary dance. (4:04 pm on 20 January, 2023)",
+        "f1": 0.14285714285714288,
+        "retrieval_latency": 0.06291030000284081
+      },
+      {
+        "category": 4,
+        "question": "What is Jon's favorite style of dance?",
+        "gold": "Contemporary",
+        "prediction": "Jon didn't explicitly mention his favorite dance style in the context provided. However, he did express a strong passion for dancing in general.",
+        "f1": 0.0,
+        "retrieval_latency": 0.054789900001196656
+      },
+      {
+        "category": 4,
+        "question": "What was Gina's favorite dancing memory?",
+        "gold": "Winning first place at a regionals dance competition",
+        "prediction": "Gina's favorite dancing memory was winning first place at a regional dance competition with her team when she was fifteen.",
+        "f1": 0.5384615384615384,
+        "retrieval_latency": 0.055394400005752686
+      },
+      {
+        "category": 4,
+        "question": "What kind of dance piece did Gina's team perform to win first place?",
+        "gold": "\"Finding Freedom\"",
+        "prediction": "The context does not provide information on the specific dance piece that Gina's team performed to win first place.",
+        "f1": 0.0,
+        "retrieval_latency": 0.07126589999825228
+      },
+      {
+        "category": 4,
+        "question": "What do the dancers in the photo represent?",
+        "gold": "They are performing at the festival",
+        "prediction": "The dancers in the photo are represented as individuals with a shared passion for dance, eager to make a difference and create amazing things together.",
+        "f1": 0.08000000000000002,
+        "retrieval_latency": 0.05028399999719113
+      },
+      {
+        "category": 4,
+        "question": "What does Gina say about the dancers in the photo?",
+        "gold": "They look graceful",
+        "prediction": "Gina expresses admiration for the dancers in the photo, praising their progress and creativity. She also shares her own passion for dance and fashion. (\"Keep going after your dreams!\" \"So proud of the progress you've made - keep it up!\", \"I'm passionate about dance and fashion\")",
+        "f1": 0.0,
+        "retrieval_latency": 0.05217510000511538
+      },
+      {
+        "category": 4,
+        "question": "What is Jon's attitude towards being part of the dance festival?",
+        "gold": "Glad",
+        "prediction": "Jon is excited and cannot wait to perform at the nearby dance festival. (4:04 pm on 20 January, 2023)",
+        "f1": 0.0,
+        "retrieval_latency": 0.04762079999636626
+      },
+      {
+        "category": 4,
+        "question": "What kind of flooring is Jon looking for in his dance studio?",
+        "gold": "Marley flooring",
+        "prediction": "Jon is looking for Marley flooring for his dance studio.",
+        "f1": 0.33333333333333337,
+        "retrieval_latency": 0.0516386999952374
+      },
+      {
+        "category": 4,
+        "question": "What did Gina find for her clothing store on 1 February, 2023?",
+        "gold": "The perfect spot for her store",
+        "prediction": "Gina found a cool new fashion piece for her clothing store. (9:32 am on 8 February, 2023)",
+        "f1": 0.2857142857142857,
+        "retrieval_latency": 0.06752800000685966
+      },
+      {
+        "category": 4,
+        "question": "What did Gina design for her store?",
+        "gold": "the space, furniture, and decor",
+        "prediction": "Based on the context provided, Gina designed something new and different for her store, likely a fashion item or design, inspired by various sources including a fashion magazine and her own determination to stand out. Exact phrases from the context include \"I worked with the artist to make it happen - it's all about being ahead of the game and giving my customers something different\" (9:32 am on 8 February, 2023) and \"This design reminds me of the grit it takes to stand out and face challenges\" (5:44 pm on 21 July, 2023",
+        "f1": 0.0,
+        "retrieval_latency": 0.05517839999811258
+      },
+      {
+        "category": 4,
+        "question": "What did Gina want her customers to feel in her store?",
+        "gold": "cozy and comfortable",
+        "prediction": "Gina wanted her customers to feel welcomed and excited about new offers and promotions in her online store. (From her message on 3 April, 2023)",
+        "f1": 0.0,
+        "retrieval_latency": 0.06875909999507712
+      },
+      {
+        "category": 4,
+        "question": "What did Jon say about Gina's progress with her store?",
+        "gold": "hard work's paying off",
+        "prediction": "Jon expressed interest in Gina's store progress and asked about new acquisitions. He also wished her good luck. (Based on the context from 21 June, 10:43 am on 4 February, 1:26 pm on 3 April, and 7:28 pm on 23 March.)",
+        "f1": 0.0,
+        "retrieval_latency": 0.06784180000249762
+      },
+      {
+        "category": 4,
+        "question": "What made Gina choose the furniture and decor for her store?",
+        "gold": "personal style and customer comfort",
+        "prediction": "Gina mentioned acquiring new unique pieces for her store without specifying the reason behind it. No information was provided in the context regarding how or why she chose the specific furniture and decor for her store.",
+        "f1": 0.0,
+        "retrieval_latency": 0.0629583999980241
+      },
+      {
+        "category": 4,
+        "question": "What did Jon say about creating a special experience for customers?",
+        "gold": "It's the key to making them feel welcome and coming back",
+        "prediction": "\"Creating a special experience for customers is the key to making them feel welcome and coming back.\" (1:48 am on 1 February, 2023)",
+        "f1": 0.5517241379310346,
+        "retrieval_latency": 0.07464379999873927
+      },
+      {
+        "category": 4,
+        "question": "What did Gina say about creating an experience for her customers?",
+        "gold": "making them want to come back",
+        "prediction": "Gina emphasized the importance of making her online store a cool and inviting oasis for customers, aiming to create a special shopping experience that makes them want to return.",
+        "f1": 0.25806451612903225,
+        "retrieval_latency": 0.050449900001694914
+      },
+      {
+        "category": 4,
+        "question": "How is Gina's store doing?",
+        "gold": "The store is doing great.",
+        "prediction": "The store is doing great, according to Gina's recent updates.",
+        "f1": 0.6153846153846153,
+        "retrieval_latency": 0.06180499999754829
+      },
+      {
+        "category": 4,
+        "question": "What does Gina's tattoo symbolize?",
+        "gold": "Freedom and expressing herself through dance",
+        "prediction": "Gina's tattoo represents freedom and following her passions while expressing herself. (9:32 am on 8 February, 2023)",
+        "f1": 0.2857142857142857,
+        "retrieval_latency": 0.048707699999795295
+      },
+      {
+        "category": 4,
+        "question": "What did Jon and Gina compare their entrepreneurial journeys to?",
+        "gold": "dancing together and supporting each other",
+        "prediction": "Jon and Gina compared their entrepreneurial journeys to \"doing it\" and staying resilient and focused.",
+        "f1": 0.0,
+        "retrieval_latency": 0.1594998999935342
+      },
+      {
+        "category": 4,
+        "question": "What advice does Gina give to Jon about running a successful business?",
+        "gold": "build relationships with customers, create a strong brand image, stay positive",
+        "prediction": "Gina encourages Jon to stay resilient and focused, impresses him with her impression of his commitment, advises him to spruce up his business plan and pitch to investors, and shares her own determination to grow her online store despite challenges.",
+        "f1": 0.0851063829787234,
+        "retrieval_latency": 0.0650374999968335
+      },
+      {
+        "category": 4,
+        "question": "Why did Jon shut down his bank account?",
+        "gold": "for his business",
+        "prediction": "Jon shut down his bank account for his business. (1:26 pm on 3 April, 2023)",
+        "f1": 0.33333333333333337,
+        "retrieval_latency": 0.05161710000538733
+      },
+      {
+        "category": 4,
+        "question": "Why did Gina combine her clothing business with dance?",
+        "gold": "she is passionate about dance and fashion",
+        "prediction": "Gina combined her clothing business with dance to blend her passions, show creativity, and share her love for both with others. (From Gina's statements on March 16, 2023, and April 3, 2023)",
+        "f1": 0.1111111111111111,
+        "retrieval_latency": 0.06785559999843827
+      },
+      {
+        "category": 4,
+        "question": "What does Jon's dance make him?",
+        "gold": "happy",
+        "prediction": "Jon's dance is his stress-buster and second nature to him. He's living his dream by having his own dance studio and teaching others. (3:14 pm on 11 May, 2023)",
+        "f1": 0.0,
+        "retrieval_latency": 0.05401189999975031
+      },
+      {
+        "category": 4,
+        "question": "What did Gina receive from a dance contest?",
+        "gold": "a trophy",
+        "prediction": "Gina received first place at a regional dance contest when she was fifteen years old.",
+        "f1": 0.0,
+        "retrieval_latency": 0.07801290000497829
+      },
+      {
+        "category": 4,
+        "question": "How does Gina stay confident in her business?",
+        "gold": "By reminding herself of her successes and progress, having a support system, and focusing on why she started",
+        "prediction": "Gina stays confident in her business by taking risks and encouraging Jon to do the same, believing it's the way to grow. (7:18 pm on 27 May, 2023) She also appreciates Jon's commitment and effort in improving his business plan and pitch to investors. (9:32 am on 8 February, 2023)",
+        "f1": 0.13333333333333333,
+        "retrieval_latency": 0.13964100000157487
+      },
+      {
+        "category": 4,
+        "question": "What kind of professional experience did Gina get accepted for on May 23, 2023?",
+        "gold": "fashion internship",
+        "prediction": "Gina got accepted for a part-time position in the fashion department of an international company. (7:18 pm on 27 May, 2023)",
+        "f1": 0.09999999999999999,
+        "retrieval_latency": 0.06910960000095656
+      },
+      {
+        "category": 4,
+        "question": "Where is Gina's fashion internship?",
+        "gold": "fashion department of an international company",
+        "prediction": "An international company. (From the context on 27 May, 2023)",
+        "f1": 0.3076923076923077,
+        "retrieval_latency": 0.07013480000023264
+      },
+      {
+        "category": 4,
+        "question": "What book is Jon currently reading?",
+        "gold": "The Lean Startup",
+        "prediction": "Jon mentioned that the book got him thinking about building an efficient business, but the text of the context does not provide the title of the book.",
+        "f1": 0.0,
+        "retrieval_latency": 0.054178499995032325
+      },
+      {
+        "category": 4,
+        "question": "What is Jon offering to the dancers at his dance studio?",
+        "gold": "One-on-one mentoring and training",
+        "prediction": "Jon is offering the opportunity to learn and experience dancing at his own dance studio. (From the first message on January 20, 2023)",
+        "f1": 0.0,
+        "retrieval_latency": 0.06078749999869615
+      },
+      {
+        "category": 4,
+        "question": "How does Jon use the clipboard with a notepad attached to it?",
+        "gold": "To set goals, track achievements, and find areas for improvement",
+        "prediction": "Jon does not use a clipboard with a notepad attached to it in the given context.",
+        "f1": 0.09090909090909093,
+        "retrieval_latency": 0.06099469999753637
+      },
+      {
+        "category": 4,
+        "question": "What does Jon tell Gina he won't do?",
+        "gold": "quit",
+        "prediction": "Jon tells Gina he won't quit.",
+        "f1": 0.2857142857142857,
+        "retrieval_latency": 0.04916780000348808
+      },
+      {
+        "category": 4,
+        "question": "What did Jon take a trip to Rome for?",
+        "gold": "To clear his mind",
+        "prediction": "Jon took a trip to Rome to clear his mind.",
+        "f1": 0.6153846153846153,
+        "retrieval_latency": 0.04576190000079805
+      },
+      {
+        "category": 4,
+        "question": "What is Jon working on opening?",
+        "gold": "a dance studio",
+        "prediction": "Jon is working on opening his business. (10:04 am on 19 June, 2023)",
+        "f1": 0.0,
+        "retrieval_latency": 0.05689649999840185
+      },
+      {
+        "category": 4,
+        "question": "How does Gina describe the studio that Jon has opened?",
+        "gold": "amazing",
+        "prediction": "Gina describes the studio as \"awesome.\" (10:33 am on 9 April, 2023)",
+        "f1": 0.0,
+        "retrieval_latency": 0.04750879999483004
+      },
+      {
+        "category": 4,
+        "question": "How does Jon feel about the opening night of his dance studio?",
+        "gold": "excited",
+        "prediction": "Jon is excited and passionate about the opening night of his dance studio, expressing it as living his dream and sharing his passion for dancing with others. (From the context on 20 January, 2023 and 11 May, 2023)",
+        "f1": 0.05882352941176471,
+        "retrieval_latency": 0.05873550000251271
+      },
+      {
+        "category": 4,
+        "question": "How does Gina describe the feeling that dance brings?",
+        "gold": "magical",
+        "prediction": "Gina describes dance as expressive, graceful, and a must-have in her life, like air. She also values the connection and sweet moments it brings. (Quotes: \"Contemporary dance is so expressive and graceful - it really speaks to me.\" (20 January, 2023), \"Dance is just me -- I can't picture life without it.\" (11 May, 2023))",
+        "f1": 0.0,
+        "retrieval_latency": 0.06124879999697441
+      },
+      {
+        "category": 4,
+        "question": "What does Jon plan to do at the grand opening of his dance studio?",
+        "gold": "savor all the good vibes",
+        "prediction": "Jon plans to perform with a small group of dancers at the grand opening of his dance studio. (4:04 pm on 20 January, 2023)",
+        "f1": 0.0,
+        "retrieval_latency": 0.07328250000136904
+      },
+      {
+        "category": 4,
+        "question": "What does Gina say to Jon about the grand opening?",
+        "gold": "Let's live it up and make some great memories",
+        "prediction": "\"Can't wait for tomorrow's grand opening!\" (said by Gina at 10:04 am on 19 June, 2023)",
+        "f1": 0.0,
+        "retrieval_latency": 0.05578399999649264
+      },
+      {
+        "category": 4,
+        "question": "What is the general sentiment about the upcoming grand opening?",
+        "gold": "excitement",
+        "prediction": "The general sentiment about the upcoming grand opening is excitement and anticipation. (Jon's responses: \"Can't wait for tomorrow's grand opening!\" and \"Can't wait to see what we can do together!\"; Gina's response: \"Can't wait for tomorrow's grand opening!\")",
+        "f1": 0.05714285714285715,
+        "retrieval_latency": 0.04731539999920642
+      },
+      {
+        "category": 4,
+        "question": "What did Gina make a limited edition line of?",
+        "gold": "Hoodies",
+        "prediction": "Gina made a limited edition line of hoodies. (from the context on 21 June, 2023)",
+        "f1": 0.14285714285714288,
+        "retrieval_latency": 0.05958169999939855
+      },
+      {
+        "category": 4,
+        "question": "According to Gina, what makes Jon a perfect mentor and guide?",
+        "gold": "His positivity and determination",
+        "prediction": "Gina believes Jon has the right attitude, can do amazing things despite obstacles, and learns and grows through challenges. She also finds motivation in big goals and support from people. (Quotes from 27 May, 2023 at 7:18 pm and 25 April, 2023 at 11:24 am)",
+        "f1": 0.0,
+        "retrieval_latency": 0.06501700000080746
+      },
+      {
+        "category": 5,
+        "question": "What temporary job did Jon take to cover expenses?",
+        "gold": "Not mentioned",
+        "prediction": "Jon did not mention taking a temporary job in the given context. The text suggests that he is working on improving his business plan, seeking advice, and collaborating with someone on a dance project.",
+        "f1": 0.0,
+        "retrieval_latency": 0.05939909999869997
+      },
+      {
+        "category": 4,
+        "question": "What plans does Jon have after receiving advice at the networking event?",
+        "gold": "Sprucing up his business plan, tweaking his pitch to investors, and working on an online platform.",
+        "prediction": "Jon is sprucing up his business plan, tweaking his pitch to investors, and working on an online platform to showcase his dance studio's offerings. (5:44 pm on 21 July, 2023)",
+        "f1": 0.6666666666666666,
+        "retrieval_latency": 0.06520669999736128
+      },
+      {
+        "category": 4,
+        "question": "What offer does Gina make to Jon regarding social media?",
+        "gold": "Helping with making content and managing his social media accounts.",
+        "prediction": "Gina encourages Jon to go for it and shows support for his business endeavors, but there's no explicit mention of social media in the context provided.",
+        "f1": 0.18181818181818182,
+        "retrieval_latency": 0.04899100000329781
+      },
+      {
+        "category": 5,
+        "question": "What is Jon's favorite style of painting?",
+        "gold": "Contemporary",
+        "prediction": "Jon does not mention anything about painting in the given context. The context only includes Jon's conversations about his dance studio, business plan, and online platform.",
+        "f1": 0.0,
+        "retrieval_latency": 0.05739929999981541
+      },
+      {
+        "category": 5,
+        "question": "What was Jon's favorite dancing memory?",
+        "gold": "Winning first place at a regionals dance competition",
+        "prediction": "Jon's favorite dancing memory is winning first place in a dance competition.",
+        "f1": 0.0,
+        "retrieval_latency": 0.057989100001577754
+      },
+      {
+        "category": 5,
+        "question": "What kind of dance piece did Jon's team perform to win first place?",
+        "gold": "\"Finding Freedom\"",
+        "prediction": "The text does not provide information about the type of dance piece Jon's team performed to win first place.",
+        "f1": 0.0,
+        "retrieval_latency": 0.05796530000225175
+      },
+      {
+        "category": 5,
+        "question": "What is Gina's attitude towards participating in the dance festival?",
+        "gold": "Glad",
+        "prediction": "Gina is excited and supportive of Jon's participation in the dance festival and expresses admiration for his passion and determination.",
+        "f1": 0.0,
+        "retrieval_latency": 0.05102130000159377
+      },
+      {
+        "category": 5,
+        "question": "What kind of flooring is Gina looking for in her dance studio?",
+        "gold": "Marley flooring",
+        "prediction": "Gina is looking for Marley flooring for her dance studio.",
+        "f1": 0.0,
+        "retrieval_latency": 0.05813230000057956
+      },
+      {
+        "category": 5,
+        "question": "What did Jon find for his clothing store on 1 February, 2023?",
+        "gold": "The perfect spot for her store",
+        "prediction": "Jon found that Gina had successfully opened and secured a great location for her clothing store on 1 February, 2023.",
+        "f1": 0.0,
+        "retrieval_latency": 0.06432450000284007
+      },
+      {
+        "category": 5,
+        "question": "What did Jon design for his store?",
+        "gold": "the space, furniture, and decor",
+        "prediction": "Jon designed an online store and an online platform to showcase the dance studio's stuff.",
+        "f1": 0.0,
+        "retrieval_latency": 0.054374699997424614
+      },
+      {
+        "category": 5,
+        "question": "What did Jon want his customers to feel in her store?",
+        "gold": "cozy and comfortable",
+        "prediction": "Jon wanted his customers to feel supported, encouraged, and proud of their achievements in starting and growing their store. He expressed excitement and positivity towards their business ventures and acknowledged their hard work.",
+        "f1": 0.0,
+        "retrieval_latency": 0.07117709999874933
+      },
+      {
+        "category": 5,
+        "question": "What made Jon choose the furniture and decor for his store?",
+        "gold": "personal style and customer comfort",
+        "prediction": "The context does not provide information on what specifically made Jon choose the furniture and decor for his store.",
+        "f1": 0.0,
+        "retrieval_latency": 0.06162439999752678
+      },
+      {
+        "category": 5,
+        "question": "How is Jon's store doing?",
+        "gold": "The store is doing great.",
+        "prediction": "Jon's store is doing great, according to Gina's statement.",
+        "f1": 0.0,
+        "retrieval_latency": 0.046474499999021646
+      },
+      {
+        "category": 5,
+        "question": "What does Jon's tattoo symbolize?",
+        "gold": "Freedom and expressing himself through dance",
+        "prediction": "It is not clear from the given context what Jon's tattoo symbolizes. The first mention of a tattoo from Jon is in the first entry on February 8, 2023, where he says \"Love the tattoo, did you just get it?\" but there is no further information provided about the tattoo or its meaning. The subsequent mentions of Jon do not refer to the tattoo again.",
+        "f1": 0.0,
+        "retrieval_latency": 0.05836480000289157
+      },
+      {
+        "category": 5,
+        "question": "Why did Gina shut down her bank account?",
+        "gold": "for her business",
+        "prediction": "Gina did not shut down her bank account. It was Jon who shut down his bank account.",
+        "f1": 0.0,
+        "retrieval_latency": 0.07230110000091372
+      },
+      {
+        "category": 5,
+        "question": "Why did Jon combine his clothing business with dance?",
+        "gold": "he is passionate about dance and fashion",
+        "prediction": "Jon did not combine his clothing business with dance. The context provided indicates that Jon has a passion for dancing and has started his own dance studio. There is no mention of a clothing business in the context.",
+        "f1": 0.0,
+        "retrieval_latency": 0.05263869999907911
+      },
+      {
+        "category": 5,
+        "question": "What did Gina receive from a dance contest?",
+        "gold": "a trophy",
+        "prediction": "Gina and her team won first place at a dance contest when she was fifteen years old.",
+        "f1": 0.0,
+        "retrieval_latency": 0.044995800002652686
+      },
+      {
+        "category": 5,
+        "question": "What kind of professional experience did Jon get accepted for on May 23, 2023?",
+        "gold": "fashion internship",
+        "prediction": "There is no mention of Jon getting accepted for a professional experience on May 23, 2023, in the given context.",
+        "f1": 0.0,
+        "retrieval_latency": 0.05292860000190558
+      },
+      {
+        "category": 5,
+        "question": "Where is Gina's HR internship?",
+        "gold": "fashion department of an international company",
+        "prediction": "Gina has been accepted into a fashion internship, but the specific location of the internship is not mentioned in the given conversation.",
+        "f1": 1.0,
+        "retrieval_latency": 0.05570530000113649
+      },
+      {
+        "category": 5,
+        "question": "Where is Jon's fashion internship?",
+        "gold": "fashion department of an international company",
+        "prediction": "There is no information provided in the context about the location of Jon's fashion internship.",
+        "f1": 0.0,
+        "retrieval_latency": 0.06078240000351798
+      },
+      {
+        "category": 5,
+        "question": "What book is Gina currently reading?",
+        "gold": "The Lean Startup",
+        "prediction": "Gina's messages do not provide any information about the book she is currently reading.",
+        "f1": 0.0,
+        "retrieval_latency": 0.06676249999873107
+      },
+      {
+        "category": 5,
+        "question": "How does Gina use the clipboard with a notepad attached to it?",
+        "gold": "To set goals, track achievements, and find areas for improvement",
+        "prediction": "Gina does not use a clipboard with a notepad attached to it in the given context. The context only shows Gina and Jon exchanging motivational messages through text messages.",
+        "f1": 0.0,
+        "retrieval_latency": 0.05738589999964461
+      },
+      {
+        "category": 5,
+        "question": "What did Jon take a trip to Barcelona for?",
+        "gold": "To clear his mind",
+        "prediction": "There is no information provided in the context about Jon taking a trip to Barcelona.",
+        "f1": 0.0,
+        "retrieval_latency": 0.060250700000324287
+      },
+      {
+        "category": 5,
+        "question": "What did Jon make a limited edition line of?",
+        "gold": "Hoodies",
+        "prediction": "Based on the context provided, there is no information given about Jon making a limited edition line of anything. The quotes discuss Jon's business plans, adapting to customer feedback, and working on an online platform for his dance studio.",
+        "f1": 0.0,
+        "retrieval_latency": 0.07589649999863468
+      },
+      {
+        "category": 5,
+        "question": "What temporary job did Gina take to cover expenses?",
+        "gold": "Not mentioned",
+        "prediction": "Gina got accepted for a fashion internship.",
+        "f1": 0.0,
+        "retrieval_latency": 0.05708020000020042
+      },
+      {
+        "category": 5,
+        "question": "What plans does Gina have after receiving advice at the networking event?",
+        "gold": "Sprucing up her business plan, tweaking her pitch to investors, and working on an online platform.",
+        "prediction": "Based on the context provided, it appears that Gina has expressed support and encouragement for Jon's decision to attend networking events. She has also shown interest in attending events herself and making a difference. However, there is no clear indication of specific plans she has made after receiving advice at the networking event.",
+        "f1": 0.0,
+        "retrieval_latency": 0.044299699999100994
+      }
+    ]
+  }
+]

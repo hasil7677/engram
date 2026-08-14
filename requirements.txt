@@ -7,7 +7,13 @@ redis==5.0.8
 neo4j==5.24.0
 celery==5.4.0
 spacy==3.7.5
-sentence-transformers==3.1.1
+# sentence-transformers pulls torch transitively. torch was previously unpinned, so a
+# fresh build resolved torch 2.13 against sentence-transformers 3.1.1 (Sept 2024) and
+# every embed() call died with "Cannot copy out of meta tensor" -- newer torch defers
+# parameter materialisation to a meta device that 3.1.1 doesn't know to handle. Both
+# are pinned now so a rebuild can't silently reintroduce that pairing.
+sentence-transformers==5.7.0
+torch==2.13.0
 boto3==1.35.36
 prometheus-client==0.21.0
 numpy==1.26.4

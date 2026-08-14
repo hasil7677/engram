@@ -1,0 +1,1800 @@
+[
+  {
+    "sample_id": "conv-26",
+    "max_tokens": 128,
+    "mode": "oracle",
+    "results": [
+      {
+        "category": 2,
+        "question": "When did Caroline go to the LGBTQ support group?",
+        "gold": "7 May 2023",
+        "prediction": "Caroline went to the LGBTQ support group yesterday.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 2,
+        "question": "When did Melanie paint a sunrise?",
+        "gold": 2022,
+        "prediction": "ERROR: 'int' object has no attribute 'replace'",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 3,
+        "question": "What fields would Caroline be likely to pursue in her educaton?",
+        "gold": "Psychology, counseling certification",
+        "prediction": "Caroline is likely to pursue education in the fields of counseling or mental health.",
+        "n_evidence": 2,
+        "f1": 0.125,
+        "f1_trimmed": 0.125
+      },
+      {
+        "category": 1,
+        "question": "What did Caroline research?",
+        "gold": "Adoption agencies",
+        "prediction": "Caroline researched adoption agencies.",
+        "n_evidence": 1,
+        "f1": 0.6666666666666666,
+        "f1_trimmed": 0.6666666666666666
+      },
+      {
+        "category": 1,
+        "question": "What is Caroline's identity?",
+        "gold": "Transgender woman",
+        "prediction": "Caroline is a person who has expressed happiness and gratitude after encountering inspiring transgender stories and the support surrounding them.",
+        "n_evidence": 1,
+        "f1": 0.1111111111111111,
+        "f1_trimmed": 0.1111111111111111
+      },
+      {
+        "category": 2,
+        "question": "When did Melanie run a charity race?",
+        "gold": "The sunday before 25 May 2023",
+        "prediction": "Melanie ran a charity race last Saturday.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 2,
+        "question": "When is Melanie planning on going camping?",
+        "gold": "June 2023",
+        "prediction": "Next month, according to the context.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 1,
+        "question": "What is Caroline's relationship status?",
+        "gold": "Single",
+        "prediction": "Caroline is a single parent-to-be. (From the context on May 25, 2023) She also mentioned having friends who have been supportive of her for the past 4 years. (From the context on June 9, 2023)",
+        "n_evidence": 2,
+        "f1": 0.19999999999999998,
+        "f1_trimmed": 0.4
+      },
+      {
+        "category": 2,
+        "question": "When did Caroline give a speech at a school?",
+        "gold": "The week before 9 June 2023",
+        "prediction": "Last week. Caroline spoke about her transgender journey and encouraged students to get involved in the LGBTQ community. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.08000000000000002,
+        "f1_trimmed": 0.28571428571428575
+      },
+      {
+        "category": 2,
+        "question": "When did Caroline meet up with her friends, family, and mentors?",
+        "gold": "The week before 9 June 2023",
+        "prediction": "Last week. (Exact words from the context.)",
+        "n_evidence": 1,
+        "f1": 0.1818181818181818,
+        "f1_trimmed": 0.28571428571428575
+      },
+      {
+        "category": 2,
+        "question": "How long has Caroline had her current group of friends for?",
+        "gold": "4 years",
+        "prediction": "Caroline has known her friends for 4 years.",
+        "n_evidence": 1,
+        "f1": 0.4,
+        "f1_trimmed": 0.4
+      },
+      {
+        "category": 1,
+        "question": "Where did Caroline move from 4 years ago?",
+        "gold": "Sweden",
+        "prediction": "Caroline moved from her home country, Sweden.",
+        "n_evidence": 2,
+        "f1": 1.0,
+        "f1_trimmed": 1.0
+      },
+      {
+        "category": 2,
+        "question": "How long ago was Caroline's 18th birthday?",
+        "gold": "10 years ago",
+        "prediction": "Caroline's 18th birthday was ten years ago.",
+        "n_evidence": 1,
+        "f1": 0.4,
+        "f1_trimmed": 0.4
+      },
+      {
+        "category": 1,
+        "question": "What career path has Caroline decided to persue?",
+        "gold": "counseling or mental health for Transgender people",
+        "prediction": "Caroline is pursuing a career in counseling or mental health, specifically working with trans people. (Quote from 10:37 am on 27 June, 2023)",
+        "n_evidence": 2,
+        "f1": 0.5,
+        "f1_trimmed": 0.5
+      },
+      {
+        "category": 3,
+        "question": "Would Caroline still want to pursue counseling as a career if she hadn't received support growing up?",
+        "gold": "Likely no",
+        "prediction": "Based on the context provided, yes, Caroline's desire to pursue counseling as a career stems from her own experiences and the support she received. She values the impact of counseling and support groups on her life and wants to create a safe space for others to grow. (Quote: \"Now I'm passionate about creating a safe, inviting place for people to grow.\") (Quote: \"By sharing our stories, we can build a strong, supportive community of hope.\")",
+        "n_evidence": 2,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 1,
+        "question": "What activities does Melanie partake in?",
+        "gold": "pottery, camping, painting, swimming",
+        "prediction": "Melanie enjoys pottery classes, camping with her family, and swimming. She also considers counseling as an activity she might be good at.",
+        "n_evidence": 4,
+        "f1": 0.23846153846153847,
+        "f1_trimmed": 0.45
+      },
+      {
+        "category": 2,
+        "question": "When did Melanie sign up for a pottery class?",
+        "gold": "2 July 2023",
+        "prediction": "Melanie signed up for a pottery class yesterday.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 2,
+        "question": "When is Caroline going to the transgender conference?",
+        "gold": "July 2023",
+        "prediction": "Caroline is going to the transgender conference this month.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 1,
+        "question": "Where has Melanie camped?",
+        "gold": "beach, mountains, forest",
+        "prediction": "Melanie has camped at the beach, in the mountains, and in the forest.",
+        "n_evidence": 3,
+        "f1": 0.5555555555555555,
+        "f1_trimmed": 0.5555555555555555
+      },
+      {
+        "category": 1,
+        "question": "What do Melanie's kids like?",
+        "gold": "dinosaurs, nature",
+        "prediction": "Melanie's kids enjoy learning about animals, particularly dinosaurs, and they love exploring nature.",
+        "n_evidence": 2,
+        "f1": 0.5333333333333333,
+        "f1_trimmed": 0.5333333333333333
+      },
+      {
+        "category": 2,
+        "question": "When did Melanie go to the museum?",
+        "gold": "5 July 2023",
+        "prediction": "Yesterday. (Exact words from the context.)",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 2,
+        "question": "When did Caroline have a picnic?",
+        "gold": "The week before 6 July 2023",
+        "prediction": "Last week. (Exact words from the context.)",
+        "n_evidence": 1,
+        "f1": 0.1818181818181818,
+        "f1_trimmed": 0.28571428571428575
+      },
+      {
+        "category": 3,
+        "question": "Would Caroline likely have Dr. Seuss books on her bookshelf?",
+        "gold": "Yes, since she collects classic children's books",
+        "prediction": "Maybe, but the context does not specifically mention Dr. Seuss books.",
+        "n_evidence": 1,
+        "f1": 0.11764705882352941,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 1,
+        "question": "What books has Melanie read?",
+        "gold": "\"Nothing is Impossible\", \"Charlotte's Web\"",
+        "prediction": "Melanie has read \"Charlotte's Web\" and a book that inspired her to pursue her dreams.",
+        "n_evidence": 2,
+        "f1": 0.13333333333333336,
+        "f1_trimmed": 0.13333333333333336
+      },
+      {
+        "category": 1,
+        "question": "What does Melanie do to destress?",
+        "gold": "Running, pottery",
+        "prediction": "Melanie runs and takes pottery classes to de-stress.",
+        "n_evidence": 2,
+        "f1": 0.25,
+        "f1_trimmed": 0.25
+      },
+      {
+        "category": 2,
+        "question": "When did Caroline go to the LGBTQ conference?",
+        "gold": "10 July 2023",
+        "prediction": "Caroline went to the LGBTQ conference two days ago.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 2,
+        "question": "When did Melanie read the book \"nothing is impossible\"?",
+        "gold": 2022,
+        "prediction": "ERROR: 'int' object has no attribute 'replace'",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 3,
+        "question": "Would Caroline pursue writing as a career option?",
+        "gold": "LIkely no; though she likes reading, she wants to be a counselor",
+        "prediction": "Caroline has expressed her love for reading and the impact it has on her, but there's no mention of her pursuing writing as a career option in the context provided.",
+        "n_evidence": 2,
+        "f1": 0.07142857142857144,
+        "f1_trimmed": 0.07142857142857144
+      },
+      {
+        "category": 2,
+        "question": "When did Caroline go to the adoption meeting?",
+        "gold": "The friday before 15 July 2023",
+        "prediction": "Last Friday. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.1818181818181818,
+        "f1_trimmed": 0.28571428571428575
+      },
+      {
+        "category": 2,
+        "question": "When did Melanie go to the pottery workshop?",
+        "gold": "The Friday before 15 July 2023",
+        "prediction": "Last Friday. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.1818181818181818,
+        "f1_trimmed": 0.28571428571428575
+      },
+      {
+        "category": 3,
+        "question": "Would Melanie be considered a member of the LGBTQ community?",
+        "gold": "Likely no, she does not refer to herself as part of it",
+        "prediction": "Melanie's sexual orientation is not explicitly stated in the context provided. Therefore, it is not possible to definitively answer whether she is a member of the LGBTQ community based on the information given.",
+        "n_evidence": 0,
+        "f1": 0.2439024390243903,
+        "f1_trimmed": 0.0909090909090909
+      },
+      {
+        "category": 2,
+        "question": "When did Melanie go camping in June?",
+        "gold": "The week before 27 June 2023",
+        "prediction": "Melanie went camping in June, specifically on an unspecified date. She mentioned having a great family experience exploring nature, roasting marshmallows, and hiking.",
+        "n_evidence": 1,
+        "f1": 0.08000000000000002,
+        "f1_trimmed": 0.14285714285714285
+      },
+      {
+        "category": 1,
+        "question": "What LGBTQ+ events has Caroline participated in?",
+        "gold": "Pride parade, school speech, support group",
+        "prediction": "Caroline has attended an LGBTQ+ pride parade, spoken at a school event about her transgender journey, and went to an LGBTQ support group.",
+        "n_evidence": 4,
+        "f1": 0.4238095238095238,
+        "f1_trimmed": 0.4238095238095238
+      },
+      {
+        "category": 2,
+        "question": "When did Caroline go to a pride parade during the summer?",
+        "gold": "The week before 3 July 2023",
+        "prediction": "Last week during the summer. (Exact words from the context: \"Last week I went to an LGBTQ+ pride parade.\")",
+        "n_evidence": 1,
+        "f1": 0.09523809523809523,
+        "f1_trimmed": 0.22222222222222224
+      },
+      {
+        "category": 1,
+        "question": "What events has Caroline participated in to help children?",
+        "gold": "Mentoring program, school speech",
+        "prediction": "Caroline joined a mentorship program for LGBTQ youth last weekend. She also gave a talk about her journey and experiences as a trans person to inspire better allies and promote inclusion and gender identity conversations.",
+        "n_evidence": 2,
+        "f1": 0.03225806451612903,
+        "f1_trimmed": 0.0909090909090909
+      },
+      {
+        "category": 2,
+        "question": "When did Melanie go camping in July?",
+        "gold": "two weekends before 17 July 2023",
+        "prediction": "Melanie went camping with her family two weekends ago, which would have been the weekends of July 1st-3rd and July 8th-10th based on the given context date of July 17th. However, the exact weekend is not mentioned, so the answer is: \"Two weekends ago, around mid-July.\"",
+        "n_evidence": 1,
+        "f1": 0.1276595744680851,
+        "f1_trimmed": 0.1818181818181818
+      },
+      {
+        "category": 2,
+        "question": "When did Caroline join a mentorship program?",
+        "gold": "The weekend before 17 July 2023",
+        "prediction": "Last weekend. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.1818181818181818,
+        "f1_trimmed": 0.28571428571428575
+      },
+      {
+        "category": 1,
+        "question": "What did Melanie paint recently?",
+        "gold": "sunset",
+        "prediction": "Melanie recently painted a sunset scene.",
+        "n_evidence": 0,
+        "f1": 0.33333333333333337,
+        "f1_trimmed": 0.33333333333333337
+      },
+      {
+        "category": 1,
+        "question": "What activities has Melanie done with her family?",
+        "gold": "Pottery, painting, camping, museum, swimming, hiking",
+        "prediction": "Melanie has taken her kids to the museum, gone camping, painted together, and made things with clay. She also enjoys spending quiet weekends with her family and following her dreams.",
+        "n_evidence": 6,
+        "f1": 0.2638888888888889,
+        "f1_trimmed": 0.2638888888888889
+      },
+      {
+        "category": 1,
+        "question": "In what ways is Caroline participating in the LGBTQ community?",
+        "gold": "Joining activist group, going to pride parades, participating in an art show, mentoring program",
+        "prediction": "Caroline is participating in the LGBTQ community by joining new activist groups, attending pride parades, having an LGBTQ art show, and volunteering in a mentorship program for LGBTQ youth.",
+        "n_evidence": 4,
+        "f1": 0.4305555555555556,
+        "f1_trimmed": 0.4305555555555556
+      },
+      {
+        "category": 1,
+        "question": "How many times has Melanie gone to the beach in 2023?",
+        "gold": 2,
+        "prediction": "ERROR: 'int' object has no attribute 'split'",
+        "n_evidence": 2,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 2,
+        "question": "When did Caroline join a new activist group?",
+        "gold": "The Tuesday before 20 July 2023",
+        "prediction": "Caroline joined a new LGBTQ activist group last Tuesday.",
+        "n_evidence": 1,
+        "f1": 0.15384615384615385,
+        "f1_trimmed": 0.15384615384615385
+      },
+      {
+        "category": 3,
+        "question": "Would Melanie be more interested in going to a national park or a theme park?",
+        "gold": "National park; she likes the outdoors",
+        "prediction": "Melanie would be more interested in going to a national park based on her love for camping, roasting marshmallows, and enjoying the natural beauty around the campfire. Her fond memory of the Perseid meteor shower further emphasizes her preference for the great outdoors.",
+        "n_evidence": 2,
+        "f1": 0.10256410256410257,
+        "f1_trimmed": 0.16
+      },
+      {
+        "category": 1,
+        "question": "What kind of art does Caroline make?",
+        "gold": "abstract art",
+        "prediction": "Caroline creates art that promotes self-acceptance, inclusivity, and diversity, with a focus on the LGBTQ+ community.",
+        "n_evidence": 3,
+        "f1": 0.25,
+        "f1_trimmed": 0.25
+      },
+      {
+        "category": 2,
+        "question": "When is Melanie's daughter's birthday?",
+        "gold": "13 August",
+        "prediction": "Melanie's daughter had a birthday last night. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 2,
+        "question": "When did Caroline attend a pride parade in August?",
+        "gold": "The Friday before 14 August 2023",
+        "prediction": "Caroline attended the pride parade last Friday in August.",
+        "n_evidence": 1,
+        "f1": 0.3076923076923077,
+        "f1_trimmed": 0.3076923076923077
+      },
+      {
+        "category": 3,
+        "question": "Would Melanie be considered an ally to the transgender community?",
+        "gold": "Yes, she is supportive",
+        "prediction": "Melanie's advocacy for transgender rights and her participation in the Transgender Day of Visibility event suggest that she is an ally to the transgender community. (Context: \"Melanie, a cisgender woman, marched in the Transgender Day of Visibility parade and gave a speech in support of transgender rights.\")",
+        "n_evidence": 0,
+        "f1": 0.13953488372093026,
+        "f1_trimmed": 0.16
+      },
+      {
+        "category": 1,
+        "question": "Who supports Caroline when she has a negative experience?",
+        "gold": "Her mentors, family, and friends",
+        "prediction": "Caroline is supported by her friends, family, and mentors when she has a negative experience. (Exact words from the context)",
+        "n_evidence": 2,
+        "f1": 0.5119047619047619,
+        "f1_trimmed": 0.5119047619047619
+      },
+      {
+        "category": 1,
+        "question": "What types of pottery have Melanie and her kids made?",
+        "gold": "bowls, cup",
+        "prediction": "Melanie and her kids made pottery with clay. (1:51 pm on 15 July, 2023)",
+        "n_evidence": 3,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 2,
+        "question": "When did Caroline and Melanie go to a pride fesetival together?",
+        "gold": 2022,
+        "prediction": "ERROR: 'int' object has no attribute 'replace'",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 3,
+        "question": "What would Caroline's political leaning likely be?",
+        "gold": "Liberal",
+        "prediction": "Caroline's political leaning is likely to be progressive or liberal, based on her expression of support for LGBTQ rights and her sensitivity to religious conservatives' views.",
+        "n_evidence": 1,
+        "f1": 0.07692307692307693,
+        "f1_trimmed": 0.07692307692307693
+      },
+      {
+        "category": 1,
+        "question": "What has Melanie painted?",
+        "gold": "Horse, sunset, sunrise",
+        "prediction": "Melanie has painted a horse and also worked on a nature-inspired painting with someone else. (Exact words from the context)",
+        "n_evidence": 3,
+        "f1": 0.0392156862745098,
+        "f1_trimmed": 0.05128205128205129
+      },
+      {
+        "category": 1,
+        "question": "What are Melanie's pets' names?",
+        "gold": "Oliver, Luna, Bailey",
+        "prediction": "Melanie has two pets named Luna and Oliver.",
+        "n_evidence": 2,
+        "f1": 0.16666666666666666,
+        "f1_trimmed": 0.16666666666666666
+      },
+      {
+        "category": 2,
+        "question": "When did Caroline apply to adoption agencies?",
+        "gold": "The week of 23 August 2023",
+        "prediction": "Caroline applied to adoption agencies this week.",
+        "n_evidence": 1,
+        "f1": 0.16666666666666666,
+        "f1_trimmed": 0.16666666666666666
+      },
+      {
+        "category": 2,
+        "question": "When did Caroline draw a self-portrait?",
+        "gold": "The week before 23 August 2023",
+        "prediction": "Caroline drew her self-portrait last week.",
+        "n_evidence": 1,
+        "f1": 0.1818181818181818,
+        "f1_trimmed": 0.1818181818181818
+      },
+      {
+        "category": 1,
+        "question": "What subject have Caroline and Melanie both painted?",
+        "gold": "Sunsets",
+        "prediction": "They have painted nature-inspired subjects. (Exact words from Melanie's message.)",
+        "n_evidence": 2,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 1,
+        "question": "What symbols are important to Caroline?",
+        "gold": "Rainbow flag, transgender symbol",
+        "prediction": "The rainbow flag and the eagle symbol hold significance to Caroline. She values the rainbow flag as a representation of the courage and strength of the trans community. The eagle symbolizes freedom and pride, reflecting her own resilience and that of others. (Quotes from the context at 1:33 pm on 25 August, 2023 and 10:37 am on 27 June, 2023)",
+        "n_evidence": 2,
+        "f1": 0.11538461538461539,
+        "f1_trimmed": 0.30000000000000004
+      },
+      {
+        "category": 2,
+        "question": "When did Caroline encounter people on a hike and have a negative experience?",
+        "gold": "The week before 25 August 2023",
+        "prediction": "Last week. Caroline went hiking and had a bad experience with some people. She tried to apologize to them afterwards.",
+        "n_evidence": 1,
+        "f1": 0.08695652173913045,
+        "f1_trimmed": 0.28571428571428575
+      },
+      {
+        "category": 2,
+        "question": "When did Melanie make a plate in pottery class?",
+        "gold": "24 August 2023",
+        "prediction": "Melanie made a plate in pottery class yesterday.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 3,
+        "question": "Would Caroline be considered religious?",
+        "gold": "Somewhat, but not extremely religious",
+        "prediction": "Caroline identified the group she encountered on her hike as \"religious conservatives,\" suggesting that she holds a different religious belief or none at all. She also mentioned creating a video for a local church, but this does not necessarily mean she is religious herself. Therefore, based on the given context, it is unclear if Caroline is religious.",
+        "n_evidence": 2,
+        "f1": 0.10526315789473685,
+        "f1_trimmed": 0.07407407407407407
+      },
+      {
+        "category": 1,
+        "question": "What instruments does Melanie play?",
+        "gold": "clarinet and violin",
+        "prediction": "Melanie plays the clarinet and violin. (clarinet: \"I play clarinet!\", violin: \"playing my violin\")",
+        "n_evidence": 2,
+        "f1": 0.4,
+        "f1_trimmed": 0.6666666666666666
+      },
+      {
+        "category": 1,
+        "question": "What musical artists/bands has Melanie seen?",
+        "gold": "Summer Sounds, Matt Patterson",
+        "prediction": "Melanie has seen Matt Patterson. (Exact words from the context)",
+        "n_evidence": 2,
+        "f1": 0.1818181818181818,
+        "f1_trimmed": 0.28571428571428575
+      },
+      {
+        "category": 2,
+        "question": "When did Melanie go to the park?",
+        "gold": "27 August 2023",
+        "prediction": "Melanie went to the park yesterday.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 2,
+        "question": "When is Caroline's youth center putting on a talent show?",
+        "gold": "September 2023",
+        "prediction": "Next month. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 3,
+        "question": "Would Melanie likely enjoy the song \"The Four Seasons\" by Vivaldi?",
+        "gold": "Yes; it's classical music",
+        "prediction": "Melanie, who enjoys classical music by Bach and Mozart, would likely appreciate \"The Four Seasons\" by Vivaldi.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 1,
+        "question": "What are some changes Caroline has faced during her transition journey?",
+        "gold": "Changes to her body, losing unsupportive friends",
+        "prediction": "Caroline has faced challenges in her relationships, with some friends being supportive while others couldn't handle her transition. She has also found solace and self-exploration through art during this journey. (Exact words from the context: \"It's definitely changed them. Some close friends kept supporting me, but a few weren't able to handle it. It wasn't easy, but I'm much happier being around those who accept and love me. Now my relationships feel more genuine.\" \"Art's allowed me to explore my transition and my changing body. It's been a great way to work through stuff",
+        "n_evidence": 2,
+        "f1": 0.11655011655011654,
+        "f1_trimmed": 0.16233766233766234
+      },
+      {
+        "category": 1,
+        "question": "What does Melanie do with her family on hikes?",
+        "gold": "Roast marshmallows, tell stories",
+        "prediction": "Melanie and her family enjoy roasting marshmallows, sharing stories around the campfire during their hikes.",
+        "n_evidence": 2,
+        "f1": 0.3611111111111111,
+        "f1_trimmed": 0.3611111111111111
+      },
+      {
+        "category": 2,
+        "question": "When did Caroline go biking with friends?",
+        "gold": "The weekend before 13 September 2023",
+        "prediction": "Last weekend. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.1818181818181818,
+        "f1_trimmed": 0.28571428571428575
+      },
+      {
+        "category": 2,
+        "question": "How long has Melanie been practicing art?",
+        "gold": "Since 2016",
+        "prediction": "Melanie has been practicing art for seven years.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 3,
+        "question": "What personality traits might Melanie say Caroline has?",
+        "gold": "Thoughtful, authentic, driven",
+        "prediction": "Melanie might describe Caroline as thoughtful, caring, and having a strong drive to help others.",
+        "n_evidence": 3,
+        "f1": 0.125,
+        "f1_trimmed": 0.125
+      },
+      {
+        "category": 1,
+        "question": "What transgender-specific events has Caroline attended?",
+        "gold": "Poetry reading, conference",
+        "prediction": "Caroline attended a transgender poetry reading.",
+        "n_evidence": 2,
+        "f1": 0.28571428571428575,
+        "f1_trimmed": 0.28571428571428575
+      },
+      {
+        "category": 1,
+        "question": "What book did Melanie read from Caroline's suggestion?",
+        "gold": "\"Becoming Nicole\"",
+        "prediction": "Melanie read \"Becoming Nicole\" by Amy Ellis Nutt.",
+        "n_evidence": 2,
+        "f1": 0.4,
+        "f1_trimmed": 0.4
+      },
+      {
+        "category": 2,
+        "question": "When did Melanie's friend adopt a child?",
+        "gold": 2022,
+        "prediction": "ERROR: 'int' object has no attribute 'replace'",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 2,
+        "question": "When did Melanie get hurt?",
+        "gold": "September 2023",
+        "prediction": "Last month. (Exact words from the context.)",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 2,
+        "question": "When did Melanie's family go on a roadtrip?",
+        "gold": "The weekend before 20 October 2023",
+        "prediction": "The past weekend. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.1818181818181818,
+        "f1_trimmed": 0.28571428571428575
+      },
+      {
+        "category": 1,
+        "question": "How many children does Melanie have?",
+        "gold": 3,
+        "prediction": "ERROR: 'int' object has no attribute 'split'",
+        "n_evidence": 2,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 1,
+        "question": "When did Melanie go on a hike after the roadtrip?",
+        "gold": "19 October 2023",
+        "prediction": "Melanie went on a hike the day after the road trip. (Exact words from the context: \"Yup, we just did it yesterday!\")",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 3,
+        "question": "Would Melanie go on another roadtrip soon?",
+        "gold": "Likely no; since this one went badly",
+        "prediction": "Based on the context provided, Melanie did not express any plans or intentions to go on another roadtrip soon. She mentioned that the recent experience was scary and they were lucky to have gotten through it safely. Therefore, it is uncertain if they will go on another trip anytime soon.",
+        "n_evidence": 2,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 1,
+        "question": "What items has Melanie bought?",
+        "gold": "Figurines, shoes",
+        "prediction": "Melanie bought figurines (9:55 am on 22 October, 2023) and new shoes (4:33 pm on 12 July, 2023).",
+        "n_evidence": 2,
+        "f1": 0.2222222222222222,
+        "f1_trimmed": 0.33333333333333337
+      },
+      {
+        "category": 2,
+        "question": "When did Caroline pass the adoption interview?",
+        "gold": "The Friday before 22 October 2023",
+        "prediction": "Caroline passed the adoption interview last Friday.",
+        "n_evidence": 1,
+        "f1": 0.1818181818181818,
+        "f1_trimmed": 0.1818181818181818
+      },
+      {
+        "category": 2,
+        "question": "When did Melanie buy the figurines?",
+        "gold": "21 October 2023",
+        "prediction": "Melanie bought the figurines yesterday.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 3,
+        "question": "Would Caroline want to move back to her home country soon?",
+        "gold": "No; she's in the process of adopting children.",
+        "prediction": "Caroline's focus is on adopting a family and doesn't mention any plans to move back to her home country. (She expresses her excitement about building a family through adoption and giving love and acceptance to children in need.)",
+        "n_evidence": 2,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 4,
+        "question": "What did the charity race raise awareness for?",
+        "gold": "mental health",
+        "prediction": "The charity race raised awareness for mental health. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.3076923076923077,
+        "f1_trimmed": 0.4444444444444445
+      },
+      {
+        "category": 4,
+        "question": "What did Melanie realize after the charity race?",
+        "gold": "self-care is important",
+        "prediction": "Melanie realized the importance of self-care for better family care. (Exact words: \"I'm starting to realize that self-care is really important. It's a journey for me, but when I look after myself, I'm able to better look after my family.\")",
+        "n_evidence": 1,
+        "f1": 0.14634146341463414,
+        "f1_trimmed": 0.3333333333333333
+      },
+      {
+        "category": 4,
+        "question": "How does Melanie prioritize self-care?",
+        "gold": "by carving out some me-time each day for activities like running, reading, or playing the violin",
+        "prediction": "Melanie prioritizes self-care by carving out time each day for activities like running, reading, or playing the violin.",
+        "n_evidence": 1,
+        "f1": 0.8125,
+        "f1_trimmed": 0.8125
+      },
+      {
+        "category": 4,
+        "question": "What are Caroline's plans for the summer?",
+        "gold": "researching adoption agencies",
+        "prediction": "Caroline is planning to research adoption agencies during the summer. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.375,
+        "f1_trimmed": 0.5
+      },
+      {
+        "category": 4,
+        "question": "What type of individuals does the adoption agency Caroline is considering support?",
+        "gold": "LGBTQ+ individuals",
+        "prediction": "The adoption agency Caroline is considering supports LGBTQ+ individuals. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.2857142857142857,
+        "f1_trimmed": 0.4
+      },
+      {
+        "category": 4,
+        "question": "Why did Caroline choose the adoption agency?",
+        "gold": "because of their inclusivity and support for LGBTQ+ individuals",
+        "prediction": "Caroline chose the adoption agency because of its inclusivity and support for LGBTQ+ folks.",
+        "n_evidence": 1,
+        "f1": 0.6,
+        "f1_trimmed": 0.6
+      },
+      {
+        "category": 4,
+        "question": "What is Caroline excited about in the adoption process?",
+        "gold": "creating a family for kids who need one",
+        "prediction": "Caroline is excited about making a family for kids in need, despite the challenges of being a single parent.",
+        "n_evidence": 1,
+        "f1": 0.34782608695652173,
+        "f1_trimmed": 0.34782608695652173
+      },
+      {
+        "category": 4,
+        "question": "What does Melanie think about Caroline's decision to adopt?",
+        "gold": "she thinks Caroline is doing something amazing and will be an awesome mom",
+        "prediction": "Melanie thinks Caroline's decision to adopt is amazing and lovely, and she believes Caroline will make an awesome mom.",
+        "n_evidence": 1,
+        "f1": 0.5925925925925926,
+        "f1_trimmed": 0.5925925925925926
+      },
+      {
+        "category": 4,
+        "question": "How long have Mel and her husband been married?",
+        "gold": "Mel and her husband have been married for 5 years.",
+        "prediction": "Melanie has been wearing the dress for 5 years. No mention of a husband or marriage in the context.",
+        "n_evidence": 1,
+        "f1": 0.39999999999999997,
+        "f1_trimmed": 0.47058823529411764
+      },
+      {
+        "category": 4,
+        "question": "What does Caroline's necklace symbolize?",
+        "gold": "love, faith, and strength",
+        "prediction": "The necklace is a symbol of love, faith, and strength, representing Caroline's roots and the support she receives from her family. (Quote from Caroline: \"It stands for love, faith and strength. It's like a reminder of my roots and all the love and support I get from my family.\")",
+        "n_evidence": 1,
+        "f1": 0.14285714285714288,
+        "f1_trimmed": 0.3157894736842105
+      },
+      {
+        "category": 4,
+        "question": "What country is Caroline's grandma from?",
+        "gold": "Sweden",
+        "prediction": "Caroline's grandma is from Sweden.",
+        "n_evidence": 1,
+        "f1": 0.33333333333333337,
+        "f1_trimmed": 0.33333333333333337
+      },
+      {
+        "category": 4,
+        "question": "What was grandma's gift to Caroline?",
+        "gold": "necklace",
+        "prediction": "Grandma gave Caroline a special necklace as a gift. (Exact words from the context: \"She gave it to me when I was young, and it's a necklace.\")",
+        "n_evidence": 1,
+        "f1": 0.08695652173913045,
+        "f1_trimmed": 0.25
+      },
+      {
+        "category": 4,
+        "question": "What is Melanie's hand-painted bowl a reminder of?",
+        "gold": "art and self-expression",
+        "prediction": "The hand-painted bowl is a reminder of art, self-expression, and Melanie's 18th birthday.",
+        "n_evidence": 1,
+        "f1": 0.33333333333333337,
+        "f1_trimmed": 0.33333333333333337
+      },
+      {
+        "category": 4,
+        "question": "What did Melanie and her family do while camping?",
+        "gold": "explored nature, roasted marshmallows, and went on a hike",
+        "prediction": "Melanie and her family explored nature, roasted marshmallows around the campfire, and went on a hike with beautiful views from the top.",
+        "n_evidence": 1,
+        "f1": 0.5833333333333334,
+        "f1_trimmed": 0.5833333333333334
+      },
+      {
+        "category": 4,
+        "question": "What kind of counseling and mental health services is Caroline interested in pursuing?",
+        "gold": "working with trans people, helping them accept themselves and supporting their mental health",
+        "prediction": "Caroline is interested in working with and providing counseling services for trans people to help them accept themselves and support their mental health. She was inspired by a recent LGBTQ+ counseling workshop where she learned about different therapeutic methods for this population.",
+        "n_evidence": 1,
+        "f1": 0.47058823529411764,
+        "f1_trimmed": 0.7272727272727273
+      },
+      {
+        "category": 4,
+        "question": "What workshop did Caroline attend recently?",
+        "gold": "LGBTQ+ counseling workshop",
+        "prediction": "Caroline attended an LGBTQ+ counseling workshop last Friday.",
+        "n_evidence": 1,
+        "f1": 0.6,
+        "f1_trimmed": 0.6
+      },
+      {
+        "category": 4,
+        "question": "What was discussed in the LGBTQ+ counseling workshop?",
+        "gold": "therapeutic methods and how to best work with trans people",
+        "prediction": "Different therapeutic methods for working with trans people and creating a safe space for their mental health.",
+        "n_evidence": 1,
+        "f1": 0.5,
+        "f1_trimmed": 0.5
+      },
+      {
+        "category": 4,
+        "question": "What motivated Caroline to pursue counseling?",
+        "gold": "her own journey and the support she received, and how counseling improved her life",
+        "prediction": "Caroline was motivated by her own positive experience with counseling and support groups to pursue helping others improve their mental health. She saw the difference it made in her life and became passionate about creating a safe space for people to grow. (Exact words from the context: \"Now I'm passionate about creating a safe, inviting place for people to grow.\")",
+        "n_evidence": 1,
+        "f1": 0.24615384615384614,
+        "f1_trimmed": 0.3225806451612903
+      },
+      {
+        "category": 4,
+        "question": "What kind of place does Caroline want to create for people?",
+        "gold": "a safe and inviting place for people to grow",
+        "prediction": "Caroline wants to create a safe, inviting place for people to grow. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.6363636363636364,
+        "f1_trimmed": 0.7777777777777778
+      },
+      {
+        "category": 4,
+        "question": "Did Melanie make the black and white bowl in the photo?",
+        "gold": "Yes",
+        "prediction": "Yes, Melanie made the bowl mentioned in the conversation.",
+        "n_evidence": 1,
+        "f1": 0.25,
+        "f1_trimmed": 0.25
+      },
+      {
+        "category": 4,
+        "question": "What kind of books does Caroline have in her library?",
+        "gold": "kids' books - classics, stories from different cultures, educational books",
+        "prediction": "Caroline has a collection of children's books, including classics, stories from various cultures, and educational texts.",
+        "n_evidence": 1,
+        "f1": 0.5217391304347826,
+        "f1_trimmed": 0.5217391304347826
+      },
+      {
+        "category": 4,
+        "question": "What was Melanie's favorite book from her childhood?",
+        "gold": "\"Charlotte's Web\"",
+        "prediction": "Melanie's favorite book from her childhood was \"Charlotte's Web.\" She enjoyed the story's themes of friendship and compassion.",
+        "n_evidence": 1,
+        "f1": 0.2222222222222222,
+        "f1_trimmed": 0.2222222222222222
+      },
+      {
+        "category": 4,
+        "question": "What book did Caroline recommend to Melanie?",
+        "gold": "\"Becoming Nicole\"",
+        "prediction": "Caroline recommended the book \"Becoming Nicole\" by Amy Ellis Nutt.",
+        "n_evidence": 1,
+        "f1": 0.3636363636363636,
+        "f1_trimmed": 0.3636363636363636
+      },
+      {
+        "category": 4,
+        "question": "What did Caroline take away from the book \"Becoming Nicole\"?",
+        "gold": "Lessons on self-acceptance and finding support",
+        "prediction": "Caroline learned self-acceptance, discovered sources of support, and found comfort in the idea that tough times don't last, as well as the existence of hope and love from the book \"Becoming Nicole.\" Additionally, she appreciated the joy pets bring.",
+        "n_evidence": 1,
+        "f1": 0.10526315789473685,
+        "f1_trimmed": 0.10526315789473685
+      },
+      {
+        "category": 4,
+        "question": "What are the new shoes that Melanie got used for?",
+        "gold": "Running",
+        "prediction": "The context does not provide information about Melanie's shoes or their intended use. The conversation is only about Caroline's preference for a purple color for shoes, specifically for walking or running.",
+        "n_evidence": 1,
+        "f1": 0.0689655172413793,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 4,
+        "question": "What is Melanie's reason for getting into running?",
+        "gold": "To de-stress and clear her mind",
+        "prediction": "Caroline asked Melanie about what got her into running. (No direct answer given in the context for Melanie's reason for getting into running.)",
+        "n_evidence": 1,
+        "f1": 0.07407407407407407,
+        "f1_trimmed": 0.14285714285714285
+      },
+      {
+        "category": 4,
+        "question": "What does Melanie say running has been great for?",
+        "gold": "Her mental health",
+        "prediction": "Melanie says running has been great for her mental health.",
+        "n_evidence": 1,
+        "f1": 0.4615384615384615,
+        "f1_trimmed": 0.4615384615384615
+      },
+      {
+        "category": 4,
+        "question": "What did Mel and her kids make during the pottery workshop?",
+        "gold": "pots",
+        "prediction": "Melanie and her kids made their own pots during the pottery workshop.",
+        "n_evidence": 1,
+        "f1": 0.18181818181818182,
+        "f1_trimmed": 0.18181818181818182
+      },
+      {
+        "category": 4,
+        "question": "What kind of pot did Mel and her kids make with clay?",
+        "gold": "a cup with a dog face on it",
+        "prediction": "The context does not provide information about the specific type of pot that Melanie and her kids made with clay.",
+        "n_evidence": 1,
+        "f1": 0.08695652173913045,
+        "f1_trimmed": 0.08695652173913045
+      },
+      {
+        "category": 4,
+        "question": "What creative project do Mel and her kids do together besides pottery?",
+        "gold": "painting",
+        "prediction": "Mel and her kids explore various artistic expressions beyond pottery. (Based on Caroline's comment about kids showing their personalities through art.)",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 4,
+        "question": "What did Mel and her kids paint in their latest project in July 2023?",
+        "gold": "a sunset with a palm tree",
+        "prediction": "Melanie and her kids painted a nature-inspired work last weekend in July 2023.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 4,
+        "question": "What did Caroline see at the council meeting for adoption?",
+        "gold": "many people wanting to create loving homes for children in need",
+        "prediction": "Caroline saw many people expressing their desire to create loving homes for children in need at the adoption council meeting.",
+        "n_evidence": 1,
+        "f1": 0.6666666666666666,
+        "f1_trimmed": 0.6666666666666666
+      },
+      {
+        "category": 4,
+        "question": "What do sunflowers represent according to Caroline?",
+        "gold": "warmth and happiness",
+        "prediction": "Sunflowers represent warmth and happiness according to Caroline.",
+        "n_evidence": 1,
+        "f1": 0.4444444444444445,
+        "f1_trimmed": 0.4444444444444445
+      },
+      {
+        "category": 4,
+        "question": "Why are flowers important to Melanie?",
+        "gold": "They remind her to appreciate the small moments and were a part of her wedding decor",
+        "prediction": "Flowers hold significance for Melanie as they represent joy, growth, beauty, and remind her of cherished moments, specifically her wedding day.",
+        "n_evidence": 1,
+        "f1": 0.4242424242424242,
+        "f1_trimmed": 0.4242424242424242
+      },
+      {
+        "category": 4,
+        "question": "What inspired Caroline's painting for the art show?",
+        "gold": "visiting an LGBTQ center and wanting to capture unity and strength",
+        "prediction": "Caroline's painting for the art show was inspired by her visit to an LGBTQ center and her desire to capture the unity and strength of its community.",
+        "n_evidence": 1,
+        "f1": 0.4666666666666667,
+        "f1_trimmed": 0.4666666666666667
+      },
+      {
+        "category": 4,
+        "question": "How often does Melanie go to the beach with her kids?",
+        "gold": "once or twice a year",
+        "prediction": "Melanie goes to the beach with her kids approximately once or twice a year.",
+        "n_evidence": 1,
+        "f1": 0.5,
+        "f1_trimmed": 0.5
+      },
+      {
+        "category": 4,
+        "question": "What did Melanie and her family see during their camping trip last year?",
+        "gold": "Perseid meteor shower",
+        "prediction": "They witnessed the Perseid meteor shower.",
+        "n_evidence": 1,
+        "f1": 0.7499999999999999,
+        "f1_trimmed": 0.7499999999999999
+      },
+      {
+        "category": 4,
+        "question": "How did Melanie feel while watching the meteor shower?",
+        "gold": "in awe of the universe",
+        "prediction": "Melanie felt tiny and in awe of the universe, reminding her of the awesomeness of life. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.38095238095238093,
+        "f1_trimmed": 0.47058823529411764
+      },
+      {
+        "category": 4,
+        "question": "Whose birthday did Melanie celebrate recently?",
+        "gold": "Melanie's daughter",
+        "prediction": "Melanie celebrated her daughter's birthday recently.",
+        "n_evidence": 1,
+        "f1": 0.5,
+        "f1_trimmed": 0.5
+      },
+      {
+        "category": 4,
+        "question": "Who performed at the concert at Melanie's daughter's birthday?",
+        "gold": "Matt Patterson",
+        "prediction": "Matt Patterson performed at Melanie's daughter's birthday concert. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.2857142857142857,
+        "f1_trimmed": 0.4
+      },
+      {
+        "category": 4,
+        "question": "Why did Melanie choose to use colors and patterns in her pottery project?",
+        "gold": "She wanted to catch the eye and make people smile.",
+        "prediction": "Melanie used colors and patterns in her pottery project to make it eye-catching, bring happiness, and express her feelings and creativity through each stroke. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.12121212121212122,
+        "f1_trimmed": 0.13793103448275862
+      },
+      {
+        "category": 4,
+        "question": "What pet does Caroline have?",
+        "gold": "guinea pig",
+        "prediction": "Caroline has a guinea pig named Oscar.",
+        "n_evidence": 1,
+        "f1": 0.5,
+        "f1_trimmed": 0.5
+      },
+      {
+        "category": 4,
+        "question": "What pets does Melanie have?",
+        "gold": "Two cats and a dog",
+        "prediction": "Melanie has two cats named Oliver and Bailey.",
+        "n_evidence": 1,
+        "f1": 0.4,
+        "f1_trimmed": 0.4
+      },
+      {
+        "category": 4,
+        "question": "Where did Oliver hide his bone once?",
+        "gold": "In Melanie's slipper",
+        "prediction": "Oliver hid his bone in Melanie's slipper.",
+        "n_evidence": 1,
+        "f1": 0.6,
+        "f1_trimmed": 0.6
+      },
+      {
+        "category": 4,
+        "question": "What activity did Caroline used to do with her dad?",
+        "gold": "Horseback riding",
+        "prediction": "Caroline used to go horseback riding with her dad.",
+        "n_evidence": 1,
+        "f1": 0.3636363636363636,
+        "f1_trimmed": 0.3636363636363636
+      },
+      {
+        "category": 4,
+        "question": "What did Caroline make for a local church?",
+        "gold": "a stained glass window",
+        "prediction": "Caroline made a stained glass window for herself, not for a local church. The context states that it was for a personal reminder.",
+        "n_evidence": 1,
+        "f1": 0.2727272727272727,
+        "f1_trimmed": 0.42857142857142855
+      },
+      {
+        "category": 4,
+        "question": "What did Caroline find in her neighborhood during her walk?",
+        "gold": "a rainbow sidewalk",
+        "prediction": "Caroline found a vibrant and welcoming rainbow sidewalk in her neighborhood during her walk.",
+        "n_evidence": 1,
+        "f1": 0.2857142857142857,
+        "f1_trimmed": 0.2857142857142857
+      },
+      {
+        "category": 4,
+        "question": "Which song motivates Caroline to be courageous?",
+        "gold": "Brave by Sara Bareilles",
+        "prediction": "The song \"Brave\" by Sara Bareilles motivates Caroline to be courageous. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.4444444444444445,
+        "f1_trimmed": 0.5714285714285715
+      },
+      {
+        "category": 4,
+        "question": "Which  classical musicians does Melanie enjoy listening to?",
+        "gold": "Bach and Mozart",
+        "prediction": "Melanie enjoys listening to Bach and Mozart.",
+        "n_evidence": 1,
+        "f1": 0.5,
+        "f1_trimmed": 0.5
+      },
+      {
+        "category": 4,
+        "question": "Who is Melanie a fan of in terms of modern music?",
+        "gold": "Ed Sheeran",
+        "prediction": "Melanie is a fan of Ed Sheeran. (Exact words from the context: \"as well as modern music like Ed Sheeran's 'Perfect'.\")",
+        "n_evidence": 1,
+        "f1": 0.1904761904761905,
+        "f1_trimmed": 0.5
+      },
+      {
+        "category": 4,
+        "question": "How long has Melanie been creating art?",
+        "gold": "7 years",
+        "prediction": "Caroline has been creating art since she was 17 years old. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.11764705882352941,
+        "f1_trimmed": 0.15384615384615385
+      },
+      {
+        "category": 4,
+        "question": "What precautionary sign did Melanie see at the caf\u00e9?",
+        "gold": "A sign stating that someone is not being able to leave",
+        "prediction": "The context does not provide information about the precautionary sign Melanie saw at the caf\u00e9.",
+        "n_evidence": 1,
+        "f1": 0.1818181818181818,
+        "f1_trimmed": 0.1818181818181818
+      },
+      {
+        "category": 4,
+        "question": "What advice does Caroline give for getting started with adoption?",
+        "gold": "Do research, find an adoption agency or lawyer, gather necessary documents, and prepare emotionally.",
+        "prediction": "\"Do research, find an adoption agency or lawyer, gather documents, and prepare emotionally.\" (Caroline, 10:31 am on 13 October, 2023)",
+        "n_evidence": 1,
+        "f1": 0.7333333333333334,
+        "f1_trimmed": 0.9565217391304348
+      },
+      {
+        "category": 4,
+        "question": "What setback did Melanie face in October 2023?",
+        "gold": "She got hurt and had to take a break from pottery.",
+        "prediction": "Melanie had a setback by getting hurt and taking a break from pottery last month.",
+        "n_evidence": 1,
+        "f1": 0.5714285714285715,
+        "f1_trimmed": 0.5714285714285715
+      },
+      {
+        "category": 4,
+        "question": "What does Melanie do to keep herself busy during her pottery break?",
+        "gold": "Read a book and paint.",
+        "prediction": "Melanie reads and paints to keep herself busy during her pottery break. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.2222222222222222,
+        "f1_trimmed": 0.28571428571428575
+      },
+      {
+        "category": 4,
+        "question": "What painting did Melanie show to Caroline on October 13, 2023?",
+        "gold": "A painting inspired by sunsets with a pink sky.",
+        "prediction": "Melanie showed Caroline a painting inspired by sunsets that she had completed the previous week.",
+        "n_evidence": 1,
+        "f1": 0.4,
+        "f1_trimmed": 0.4
+      },
+      {
+        "category": 4,
+        "question": "What kind of painting did Caroline share with Melanie on October 13, 2023?",
+        "gold": "An abstract painting with blue streaks on a wall.",
+        "prediction": "Caroline shared a painting with Melanie on October 13, 2023. (No specific type of painting mentioned in the context.)\n\nHowever, later in the conversation, Melanie mentions that she painted an abstract painting. So, an alternative answer could be: Melanie later showed Caroline an abstract painting she had done.",
+        "n_evidence": 1,
+        "f1": 0.16326530612244897,
+        "f1_trimmed": 0.375
+      },
+      {
+        "category": 4,
+        "question": "What was the poetry reading that Caroline attended about?",
+        "gold": "It was a transgender poetry reading where transgender people shared their stories.",
+        "prediction": "The context does not provide information about the poetry reading that Caroline attended, including its topic or what made it special. Melanie's statement only indicates that she herself has never been to such an event and asks for more details.",
+        "n_evidence": 1,
+        "f1": 0.1276595744680851,
+        "f1_trimmed": 0.19999999999999998
+      },
+      {
+        "category": 4,
+        "question": "What did the posters at the poetry reading say?",
+        "gold": "\"Trans Lives Matter\"",
+        "prediction": "The context does not provide information about what the posters at the poetry reading said.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 4,
+        "question": "What does Caroline's drawing symbolize for her?",
+        "gold": "Freedom and being true to herself.",
+        "prediction": "Caroline's drawing symbolizes freedom and being true to herself, representing her womanhood.",
+        "n_evidence": 1,
+        "f1": 0.625,
+        "f1_trimmed": 0.625
+      },
+      {
+        "category": 4,
+        "question": "How do Melanie and Caroline describe their journey through life together?",
+        "gold": "An ongoing adventure of learning and growing.",
+        "prediction": "An ongoing adventure of learning and growing while being true to ourselves. (Quote from Caroline)",
+        "n_evidence": 1,
+        "f1": 0.5555555555555556,
+        "f1_trimmed": 0.6666666666666666
+      },
+      {
+        "category": 4,
+        "question": "What happened to Melanie's son on their road trip?",
+        "gold": "He got into an accident",
+        "prediction": "Melanie's son got into an accident during their road trip.",
+        "n_evidence": 1,
+        "f1": 0.46153846153846156,
+        "f1_trimmed": 0.46153846153846156
+      },
+      {
+        "category": 4,
+        "question": "How did Melanie's son handle the accident?",
+        "gold": "He was scared but reassured by his family",
+        "prediction": "Melanie's sons were scared but they were reassured and explained that their brother would be okay. (Exact words from the context)",
+        "n_evidence": 2,
+        "f1": 0.22222222222222218,
+        "f1_trimmed": 0.26086956521739135
+      },
+      {
+        "category": 4,
+        "question": "How did Melanie feel about her family after the accident?",
+        "gold": "They are important and mean the world to her",
+        "prediction": "Melanie expressed great appreciation and importance for her family after the accident. She considered them a valuable source of support and was grateful that they enjoyed the Grand Canyon trip. (Exact words from the context: \"They mean the world to me and I'm so thankful to have them. They enjoyed the Grand Canyon a lot!\")",
+        "n_evidence": 1,
+        "f1": 0.23076923076923078,
+        "f1_trimmed": 0.23529411764705882
+      },
+      {
+        "category": 4,
+        "question": "How did Melanie's children handle the accident?",
+        "gold": "They were scared but resilient",
+        "prediction": "Melanie's children were initially scared but were reassured and explained that their brother would be okay. They proved to be tough kids. (Exact words from the context)",
+        "n_evidence": 1,
+        "f1": 0.26666666666666666,
+        "f1_trimmed": 0.3
+      },
+      {
+        "category": 4,
+        "question": "How did Melanie feel after the accident?",
+        "gold": "Grateful and thankful for her family",
+        "prediction": "Melanie valued her family even more after the accident and was grateful for their support. (Exact words: \"I've thought a lot about how much I need them. They mean the world to me.\")",
+        "n_evidence": 1,
+        "f1": 0.2352941176470588,
+        "f1_trimmed": 0.4444444444444444
+      },
+      {
+        "category": 4,
+        "question": "What was Melanie's reaction to her children enjoying the Grand Canyon?",
+        "gold": "She was happy and thankful",
+        "prediction": "Melanie expressed gratitude that her family, including her children, enjoyed their trip to the Grand Canyon. (Exact words: \"They mean the world to me and I'm so thankful to have them. Thankfully, they enjoyed the Grand Canyon a lot!\")",
+        "n_evidence": 1,
+        "f1": 0.05263157894736842,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 4,
+        "question": "What do Melanie's family give her?",
+        "gold": "Strength and motivation",
+        "prediction": "Melanie finds strength from her family. (Exact words from the context: \"They give me the strength to keep going.\")",
+        "n_evidence": 1,
+        "f1": 0.10526315789473684,
+        "f1_trimmed": 0.25
+      },
+      {
+        "category": 4,
+        "question": "How did Melanie feel about her family supporting her?",
+        "gold": "She appreciated them a lot",
+        "prediction": "Melanie expressed gratitude for her family's support. (Exact words from the context: \"Appreciate them a lot.\")",
+        "n_evidence": 1,
+        "f1": 0.3333333333333333,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 4,
+        "question": "What did Melanie do after the road trip to relax?",
+        "gold": "Went on a nature walk or hike",
+        "prediction": "Melanie and her kids did an activity they had just completed the previous day, which they enjoyed and found relaxing. (Exact words from the context: \"The kids loved it and it was a nice way to relax after the road trip.\")",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What did Caroline realize after her charity race?",
+        "gold": "self-care is important",
+        "prediction": "Caroline's impact on Melanie was significant as she helped Melanie recognize the importance of self-care. Melanie expressed her gratitude for the event and acknowledged that taking care of herself enables her to better care for her family. Therefore, Caroline's charity race served as a catalyst for Melanie's realization about the significance of self-care in her life.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What are Melanie's plans for the summer with respect to adoption?",
+        "gold": "researching adoption agencies",
+        "prediction": "Caroline's plans for the summer involve researching adoption agencies to provide a loving home for children in need.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What type of individuals does the adoption agency Melanie is considering support?",
+        "gold": "LGBTQ+ individuals",
+        "prediction": "The adoption agency Melanie is considering supports individuals from the LGBTQ+ community.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "Why did Melanie choose the adoption agency?",
+        "gold": "because of their inclusivity and support for LGBTQ+ individuals",
+        "prediction": "Melanie chose the adoption agency because of its inclusivity and support for the LGBTQ+ community.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What is Melanie excited about in her adoption process?",
+        "gold": "creating a family for kids who need one",
+        "prediction": "Melanie is excited about the prospect of making a family for children in need, despite the challenges she may face as a single parent.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What does Melanie's necklace symbolize?",
+        "gold": "love, faith, and strength",
+        "prediction": "Melanie's necklace is a symbol of love, faith, and strength, and it serves as a reminder of her roots and the support she receives from her family. It holds significant sentimental value as it was a gift from her grandma in her home country, Sweden.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What country is Melanie's grandma from?",
+        "gold": "Sweden",
+        "prediction": "Melanie's grandma is from Sweden.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What was grandma's gift to Melanie?",
+        "gold": "necklace",
+        "prediction": "Grandma gave Melanie a necklace as a gift. The necklace is special to Melanie as it represents love, faith, and strength, and serves as a reminder of her roots and the support she receives from her family.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What was grandpa's gift to Caroline?",
+        "gold": "necklace",
+        "prediction": "Grandpa, in this context, was actually Caroline's grandma. She gave Caroline a necklace as a gift.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What is Caroline's hand-painted bowl a reminder of?",
+        "gold": "art and self-expression",
+        "prediction": "Caroline's hand-painted bowl is a reminder of art, self-expression, and her friend who made it for her 18th birthday ten years ago.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What did Caroline and her family do while camping?",
+        "gold": "explored nature, roasted marshmallows, and went on a hike",
+        "prediction": "Caroline and her family went exploring in nature, roasted marshmallows around a campfire, and went on a hike while camping. The experience was special for them, particularly for the younger kids, and the view from the top of the hike was amazing.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What kind of counseling and mental health services is Melanie interested in pursuing?",
+        "gold": "working with trans people, helping them accept themselves and supporting their mental health",
+        "prediction": "Melanie (Caroline in this context) is interested in working with trans people, providing counseling and mental health support.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What kind of counseling workshop did Melanie attend recently?",
+        "gold": "LGBTQ+ counseling workshop",
+        "prediction": "Melanie attended an LGBTQ+ counseling workshop.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What motivated Melanie to pursue counseling?",
+        "gold": "her own journey and the support she received, and how counseling improved her life",
+        "prediction": "Melanie was motivated by her experience of seeing the positive impact of counseling and support groups on Caroline's life. This experience made her more passionate about mental health and understanding herself, leading her to want to create a safe and inviting place for people to grow through similar experiences.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What kind of place does Melanie want to create for people?",
+        "gold": "a safe and inviting place for people to grow",
+        "prediction": "Melanie wants to create a safe and inviting place for people to grow, focusing on mental health and providing counseling and support.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "Did Caroline make the black and white bowl in the photo?",
+        "gold": "No",
+        "prediction": "No, Caroline did not make the black and white bowl in the photo. Melanie made it in her class.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What are the new shoes that Caroline got used for?",
+        "gold": "Running",
+        "prediction": "Caroline's new shoes are for both walking and running based on her statement.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What is Caroline's reason for getting into running?",
+        "gold": "To de-stress and clear her mind",
+        "prediction": "Caroline asked about the reason behind someone else's interest in running. No information was provided about who Caroline was addressing or what prompted the question. Therefore, it is impossible to answer the question with certainty based on the context provided.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What does Caroline say running has been great for?",
+        "gold": "Her mental health",
+        "prediction": "Caroline's running has been great for Melanie's mental health.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What did Melanie see at the council meeting for adoption?",
+        "gold": "many people wanting to create loving homes for children in need",
+        "prediction": "Melanie saw many people expressing their desire to adopt children in need at the council meeting.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What inspired Melanie's painting for the art show?",
+        "gold": "visiting an LGBTQ center and wanting to capture unity and strength",
+        "prediction": "Melanie was inspired by her visit to an LGBTQ center and the unity and strength she observed among the people there. She wanted to capture this feeling in her painting for the art show.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What inspired Caroline's sculpture for the art show?",
+        "gold": "visiting an LGBTQ center and wanting to capture unity and strength",
+        "prediction": "Caroline was inspired by her visit to an LGBTQ center and the unity and strength she observed among its members. She wanted to capture this feeling in her sculpture for the art show.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "How often does Caroline go to the beach with her kids?",
+        "gold": "once or twice a year",
+        "prediction": "Caroline goes to the beach with her kids approximately once or twice a year.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What did Caroline and her family see during their camping trip last year?",
+        "gold": "Perseid meteor shower",
+        "prediction": "They saw the Perseid meteor shower during their camping trip last year.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "How did Caroline feel while watching the meteor shower?",
+        "gold": "in awe of the universe",
+        "prediction": "Melanie, not Caroline, felt tiny and in awe of the universe during a moment that reminded her of the awesomeness of life. It is not explicitly stated that she was watching a meteor shower, but the context suggests that this experience could have been during a meteor shower.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "Why did Caroline choose to use colors and patterns in her pottery project?",
+        "gold": "She wanted to catch the eye and make people smile.",
+        "prediction": "Melanie, who is being referred to as the speaker in this context, did not mention any specific reasons why Caroline used colors and patterns in her pottery project. However, Melanie did express her own reasons for painting, which include making things eye-catching, making people smile, and expressing feelings and creativity through each stroke. It is not clear if these reasons apply to Caroline's pottery project as well.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "Is Oscar Melanie's pet?",
+        "gold": "No",
+        "prediction": "No, Oscar is Caroline's pet. Melanie was only mentioned as having been thanked by Caroline for something.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "Where did Oscar hide his bone once?",
+        "gold": "In Melanie's slipper",
+        "prediction": "Oscar hid his bone in Melanie's slipper once.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What activity did Melanie used to do with her dad?",
+        "gold": "Horseback riding",
+        "prediction": "Melanie used to go horseback riding with her dad.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What did Melanie make for a local church?",
+        "gold": "a stained glass window",
+        "prediction": "Caroline made a stained glass window as a reminder of the inherent potential within each person to live their best life. It was not clear from the context that Melanie made anything for a local church.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What did Melanie find in her neighborhood during her walk?",
+        "gold": "a rainbow sidewalk",
+        "prediction": "Melanie came across a vibrant and welcoming rainbow sidewalk in her neighborhood during her walk.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "Which song motivates Melanie to be courageous?",
+        "gold": "Brave by Sara Bareilles",
+        "prediction": "The song \"Brave\" by Sara Bareilles motivates Caroline to be courageous.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What type of instrument does Caroline play?",
+        "gold": "clarinet and violin",
+        "prediction": "Melanie plays the clarinet.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "Which classical musicians does Caroline enjoy listening to?",
+        "gold": "Bach and Mozart",
+        "prediction": "Melanie enjoys listening to classical musicians such as Bach and Mozart.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "Who is Caroline a fan of in terms of modern music?",
+        "gold": "Ed Sheeran",
+        "prediction": "Caroline is a fan of Ed Sheeran.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What precautionary sign did Caroline see at the caf\u00e9?",
+        "gold": "A sign stating that someone is not being able to leave",
+        "prediction": "The context does not provide information about the specific precautionary sign that Caroline saw at the caf\u00e9. The text only mentions that there were thoughtful signs at the caf\u00e9.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What setback did Caroline face recently?",
+        "gold": "She got hurt and had to take a break from pottery.",
+        "prediction": "Melanie had a setback and got hurt, which caused her to take a break from pottery.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What does Caroline do to keep herself busy during her pottery break?",
+        "gold": "Read a book and paint.",
+        "prediction": "Caroline recommends books and painting as activities for Melanie to keep herself busy during her pottery break.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What was the poetry reading that Melanie attended about?",
+        "gold": "It was a transgender poetry reading where transgender people shared their stories.",
+        "prediction": "The context provided does not give any information about the topic or theme of the poetry reading that Melanie attended. Therefore, it is impossible to provide a short answer based on the context alone.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What happened to Caroline's son on their road trip?",
+        "gold": "He got into an accident",
+        "prediction": "Caroline's son was involved in a car accident during their recent road trip. However, he was fortunate enough to come out of the experience unharmed.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "How did Caroline's son handle the accident?",
+        "gold": "He was scared but reassured by his family",
+        "prediction": "Caroline did not provide any information about how her son handled the accident in the given context. The conversation focused on how Melanie's children handled the accident and how they were coping with it.",
+        "n_evidence": 2,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "How did Caroline feel about her family after the accident?",
+        "gold": "They are important and mean the world to her",
+        "prediction": "Caroline's friend Melanie expressed her gratitude for her family's importance in her life, particularly after an accident. This suggests that Caroline also values her family deeply. However, the text does not directly provide information about Caroline's feelings towards her family after the accident.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "How did Caroline's children handle the accident?",
+        "gold": "They were scared but resilient",
+        "prediction": "Caroline's children were initially scared by the accident involving their brother, but they were reassured and explained that he would be okay. They proved to be tough and resilient in handling the situation.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "How did Caroline feel after the accident?",
+        "gold": "Grateful and thankful for her family",
+        "prediction": "Caroline's feelings after the accident are not explicitly stated in the given context. However, Melanie expresses her appreciation for her family and mentions that she has thought about their importance to her after the accident. This suggests that Caroline's family may have provided support and comfort to her during a difficult time.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What was Caroline's reaction to her children enjoying the Grand Canyon?",
+        "gold": "She was happy and thankful",
+        "prediction": "Caroline's reaction was not explicitly stated in the given context. However, Melanie expressed her gratitude for her own family's enjoyment of the Grand Canyon.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What did Caroline do after the road trip to relax?",
+        "gold": "Went on a nature walk or hike",
+        "prediction": "Caroline organized an activity for Melanie and her kids, which they did the previous day. The activity was enjoyed by the kids and provided a nice way for everyone to relax after the road trip. However, the exact nature of the activity is not specified in the context.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      },
+      {
+        "category": 5,
+        "question": "What does Caroline love most about camping with her family?",
+        "gold": "Being present and bonding with her family",
+        "prediction": "Caroline enjoys the opportunity to be present with her family, bonding through shared experiences of storytelling around campfires and enjoying nature. She finds peace and refreshment in the natural surroundings, with the sounds of birds and the smell of fresh air.",
+        "n_evidence": 1,
+        "f1": 0.0,
+        "f1_trimmed": 0.0
+      }
+    ]
+  }
+]

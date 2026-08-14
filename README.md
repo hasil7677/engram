@@ -53,12 +53,14 @@ working, rather than inferring it from curl.
 
 ```bash
 pip install -r requirements-dev.txt
-docker compose up qdrant redis neo4j    # api/celery_worker not needed
+python -m spacy download en_core_web_sm   # entity extraction; not a pip dependency
+docker compose up qdrant redis neo4j      # api/celery_worker not needed
 pytest
 ```
 
-33 tests. 5 run with no external services; the rest exercise real cross-tenant isolation
-against live Qdrant/Redis/Neo4j and auto-skip cleanly if those aren't reachable.
+34 tests, all passing against live services. 5 run with no external services; the rest
+exercise real cross-tenant isolation against live Qdrant/Redis/Neo4j and auto-skip cleanly if
+those aren't reachable — so check for skips before reading a green run as meaningful.
 `tests/test_retrieval_quality.py` is a recall@5 eval over a fixed fact/query set — the only
 test that checks retrieval finds the *right* thing rather than just that isolation holds.
 
@@ -66,33 +68,74 @@ test that checks retrieval finds the *right* thing rather than just that isolati
 
 `scripts/eval_locomo.py` runs Engram as the retriever against the official
 [LoCoMo](https://arxiv.org/abs/2402.17753) dataset (ACL 2024), using the benchmark's own QA
-prompt templates verbatim and its own F1 scorer. One conversation so far (`conv-30`, 369
-turns, 105 questions):
+prompt templates verbatim and its own F1 scorer. Two conversations (`conv-30` and `conv-26`,
+788 dialog turns, 304 questions), answer model capped at 128 tokens:
 
-| | |
-|---|---|
-| Mean F1 | **0.149** |
-| Median retrieval latency | **58 ms** |
-| Mean retrieval latency | 69 ms |
-| Ingest | 453 s for 369 turns |
+| | conv-30 | conv-26 | combined |
+|---|---|---|---|
+| Questions | 105 | 199 | 304 |
+| **Mean F1** | 0.133 | 0.126 | **0.128** |
+| Oracle F1 (gold context) | 0.199 | 0.187 | **0.191** |
+| Turns ingested | 369 in 487 s | 419 in 532 s | — |
 
-That F1 is bad, and it's worth being precise about *why*, because the number mostly isn't
-measuring retrieval:
+Retrieval latency, combined: **median 59 ms**, mean 87 ms, p95 109 ms.
 
-- **The answer model is capped at 32 tokens** (`invoke_chat(prompt, max_tokens=32)`).
-  Mistral-7B largely ignores "answer in the form of a short phrase" and writes prose, so
-  answers get truncated mid-word — one prediction literally ends `Go get '`. F1 against a
-  short gold string collapses.
-- **F1 punishes verbosity even when the answer is right.** Gold `19 January, 2023` vs
-  prediction `Jon lost his job as a banker in January, 2023` scores 0.25 — substantively
-  correct, lexically penalised.
-- Category 5 scores worst (0.083) and category 1 best (0.279), which is the shape you'd
-  expect if answer synthesis, not recall, is the binding constraint.
+### Raising the token cap made the score worse
 
-So the honest claim is: retrieval is fast and the harness is sound; the generation half is
-unturned. The next diagnostic is an oracle run — feed gold facts straight to the answer model
-and re-score. If oracle F1 is also low, the answer model and token cap are the problem, not
-retrieval. That experiment hasn't been run yet.
+The earlier number here was 0.149 on `conv-30` with `max_tokens=32`, and the stated suspicion
+was that truncation was destroying the score — 48 of 105 predictions ran off the end without
+finishing, one of them mid-quote at `Go get '`. Raising the cap to 128 fixed exactly that:
+truncation drops to 1 of 105. F1 *fell* to 0.133.
+
+The cap was the wrong lever. LoCoMo's F1 puts precision in the denominator, gold answers
+average 5 words, and Mistral-7B's average 24.5 — so letting the model write *more* lowers the
+score. Truncation was a real defect, but it was cutting off prose the scorer was going to
+punish anyway. Re-scoring the same predictions after mechanically keeping only the first
+sentence lifts combined F1 from 0.128 to 0.138: the gap is verbosity, not knowledge.
+
+### The oracle diagnostic
+
+`scripts/oracle_locomo.py` removes retrieval from the loop — it builds context from exactly
+the turns the dataset labels as each question's supporting `evidence`, keeping the prompt,
+model, and scorer identical. It needs no running services, only Bedrock.
+
+With perfect retrieval, combined F1 is **0.191** against 0.128 end-to-end. So the *entire*
+contribution retrieval could make, if it returned the gold evidence every single time, is
+about 0.06 F1 — and the ceiling it reveals is still 0.19. The answer model is the binding
+constraint, not recall.
+
+Per category, combined, the split is sharper than the average suggests:
+
+| Category | n | End-to-end | Oracle |
+|---|---|---|---|
+| single-hop | 114 | 0.181 | 0.326 |
+| multi-hop | 43 | 0.112 | 0.313 |
+| temporal | 63 | 0.139 | 0.085 |
+| open-domain | 13 | 0.059 | 0.085 |
+| adversarial | 71 | 0.056 | 0.014 |
+
+Two categories where the oracle scores *worse* than real retrieval, which is the interesting
+part:
+
+- **Temporal.** Asked "When was Jon in Paris?" with only the gold turn as context, the model
+  answers `Jon was in Paris yesterday.` — gold is `28 January 2023`. It won't resolve a
+  relative reference against the session date sitting in its own context. Real retrieval
+  returns five memories with five date stamps, and the extra dates accidentally anchor it more
+  often than the single correct turn does. This is the capability LoCoMo was built to test,
+  and this model largely lacks it.
+- **Adversarial.** These have no answer; scoring 1.0 requires abstaining. Handed a plausible
+  distractor as its entire context, the model answers instead of declining, and drops to
+  0.014.
+
+The honest summary: retrieval is fast and the harness is sound, but this benchmark is
+currently measuring Mistral-7B's answer formatting and temporal reasoning far more than it is
+measuring Engram. A meaningfully better number needs a different answer model or a prompt that
+forces short phrases — not better recall. Both would be departures from the paper's protocol,
+which is why neither is baked in here.
+
+Numbers above are the raw completions, exactly as the official scorer sees them. The
+first-sentence figure is quoted once, explicitly labelled, and is *not* the protocol —
+`oracle_locomo.py` reports it alongside the raw score purely to separate "wrong" from "wordy".
 
 The eval deliberately calls `bedrock_client.invoke_chat` directly rather than `/v1/chat`, so
 Engram's own prompt template and its `(relevance=0.70)` debug annotations don't contaminate
@@ -159,9 +202,12 @@ Stated plainly rather than hidden:
 
 - Celery Beat isn't wired into `docker-compose.yml`, so the L2/L3/L4 compression pipeline is
   fully implemented but never fires automatically. Running the tasks by hand works.
-- LoCoMo has been run on one conversation out of ten, and the oracle diagnostic that would
-  separate retrieval quality from answer-generation quality hasn't been run at all.
-- `ui/README.md` is still the stock Vite template text.
+- LoCoMo has been run on two conversations out of ten (304 of 1,986 questions). The oracle
+  diagnostic now exists and says the answer model, not retrieval, is the ceiling — so the
+  remaining eight conversations would sharpen the estimate without changing that conclusion.
+- Nothing in the eval isolates *retrieval* quality on its own. F1 is an end-to-end score, so
+  a recall@k measured against the dataset's `evidence` labels would say far more about Engram
+  specifically than the headline number does.
 - No load testing, no HA or backup story for the three stateful stores.
 - No SDK — integration is raw HTTP today.
 - No billing or per-tenant metering (metrics are aggregate-only by design; it would have to

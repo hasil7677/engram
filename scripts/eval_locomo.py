@@ -55,17 +55,41 @@ QA_PROMPT_CAT_5 = (
     "\nBased on the above context, answer the following question.\n\nQuestion: {} Short answer:\n"
 )
 
+import urllib.error  # noqa: E402
 import urllib.request  # noqa: E402
 
 
-def _request(method: str, path: str, api_key: str, user_id: str, body: dict | None = None, timeout: int = 30) -> dict:
+def _request(method: str, path: str, api_key: str, user_id: str, body: dict | None = None,
+             timeout: int = 30, attempts: int = 4) -> dict:
+    """One API call, retried on transient transport failures.
+
+    A full conversation is ~475 sequential requests, each on a fresh connection
+    (urllib does no pooling). On Windows/Docker Desktop the port-forward proxy
+    resets a connection now and then under that churn -- a run died at turn 88
+    of 369 with WinError 10054 while the server itself logged nothing and never
+    restarted. Without retries a single such blip throws away a 13-minute run,
+    so back off and retry rather than treating it as a result.
+
+    HTTP errors are deliberately NOT retried: a 4xx/5xx is the server actually
+    answering, and silently retrying it would paper over a real failure.
+    """
     data = json.dumps(body).encode() if body is not None else None
-    req = urllib.request.Request(
-        f"{BASE_URL}{path}", data=data, method=method,
-        headers={"Content-Type": "application/json", "X-API-Key": api_key, "X-User-Id": user_id},
-    )
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return json.loads(resp.read())
+    last_exc: Exception | None = None
+    for attempt in range(attempts):
+        req = urllib.request.Request(
+            f"{BASE_URL}{path}", data=data, method=method,
+            headers={"Content-Type": "application/json", "X-API-Key": api_key, "X-User-Id": user_id},
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return json.loads(resp.read())
+        except urllib.error.HTTPError:
+            raise
+        except (ConnectionError, TimeoutError, OSError) as exc:
+            last_exc = exc
+            if attempt < attempts - 1:
+                time.sleep(2.0 * (attempt + 1))
+    raise RuntimeError(f"{method} {path} failed after {attempts} attempts: {last_exc}")
 
 
 def register_tenant(api_key: str, tenant_id: str) -> None:
@@ -93,7 +117,7 @@ def ingest_conversation(api_key: str, user_id: str, sample: dict, pace_seconds: 
     return n
 
 
-def answer_question(api_key: str, user_id: str, question: dict, top_k: int) -> tuple[str, float]:
+def answer_question(api_key: str, user_id: str, question: dict, top_k: int, max_tokens: int) -> tuple[str, float]:
     t0 = time.perf_counter()
     result = _request("POST", "/v1/memory/search", api_key, user_id,
                        {"query": question["question"], "top_k": top_k, "use_graph_expansion": True})
@@ -108,11 +132,11 @@ def answer_question(api_key: str, user_id: str, question: dict, top_k: int) -> t
     context = "\n".join(f'- {m["text"]}' for m in result["memories"])
     prompt_template = QA_PROMPT_CAT_5 if question["category"] == 5 else QA_PROMPT
     prompt = context + "\n" + prompt_template.format(question["question"])
-    answer = invoke_chat(prompt, max_tokens=32).strip()
+    answer = invoke_chat(prompt, max_tokens=max_tokens).strip()
     return answer, retrieval_latency
 
 
-def run_sample(sample: dict, top_k: int, pace_seconds: float, rate_limit_per_min: int) -> dict:
+def run_sample(sample: dict, top_k: int, pace_seconds: float, rate_limit_per_min: int, max_tokens: int) -> dict:
     sample_id = sample["sample_id"]
     tenant_id = f"locomo_{sample_id}"
     api_key = f"locomo_key_{sample_id}"
@@ -120,6 +144,15 @@ def run_sample(sample: dict, top_k: int, pace_seconds: float, rate_limit_per_min
 
     print(f"[{sample_id}] registering tenant + erasing prior state...")
     register_tenant(api_key, tenant_id)
+
+    # The API loads the sentence-transformers model lazily, on the first embed. On a
+    # cold container that first write takes far longer than the normal 30s timeout, so
+    # do it once with a generous one -- otherwise the run dies on turn 1 and a real
+    # server-side failure is indistinguishable from a slow model load. The warmup
+    # memory is erased by the DELETE immediately below.
+    print(f"[{sample_id}] warming up the embedding model (first call loads it)...")
+    _request("POST", "/v1/memory", api_key, user_id, {"text": "warmup"}, timeout=600)
+
     _request("DELETE", "/v1/memory", api_key, user_id)
 
     print(f"[{sample_id}] ingesting dialog turns (paced at {pace_seconds}s/req to respect "
@@ -133,7 +166,7 @@ def run_sample(sample: dict, top_k: int, pace_seconds: float, rate_limit_per_min
     print(f"[{sample_id}] answering {len(sample['qa'])} QA questions...")
     for i, q in enumerate(sample["qa"]):
         try:
-            answer, retrieval_latency = answer_question(api_key, user_id, q, top_k)
+            answer, retrieval_latency = answer_question(api_key, user_id, q, top_k, max_tokens)
             f1 = score_qa(q, answer)
         except Exception as exc:
             answer, retrieval_latency, f1 = f"ERROR: {exc}", 0.0, 0.0
@@ -183,6 +216,8 @@ def main():
     parser.add_argument("--samples", type=str, default=None, help="comma-separated sample_ids, default: smallest conversation only")
     parser.add_argument("--top-k", type=int, default=5)
     parser.add_argument("--pace-seconds", type=float, default=1.1, help="delay between rate-limited requests")
+    parser.add_argument("--max-tokens", type=int, default=128,
+                        help="answer-model token cap; 32 truncated answers mid-word in earlier runs")
     parser.add_argument("--out", type=str, default=None, help="write full per-question results as JSON")
     args = parser.parse_args()
 
@@ -198,7 +233,7 @@ def main():
 
     print(f"Running LoCoMo eval on: {[s['sample_id'] for s in samples]}")
 
-    all_results = [run_sample(s, args.top_k, args.pace_seconds, 60) for s in samples]
+    all_results = [run_sample(s, args.top_k, args.pace_seconds, 60, args.max_tokens) for s in samples]
 
     report(all_results)
 
