@@ -69,16 +69,22 @@ test that checks retrieval finds the *right* thing rather than just that isolati
 `scripts/eval_locomo.py` runs Engram as the retriever against the official
 [LoCoMo](https://arxiv.org/abs/2402.17753) dataset (ACL 2024), using the benchmark's own QA
 prompt templates verbatim and its own F1 scorer. Two conversations (`conv-30` and `conv-26`,
-788 dialog turns, 304 questions), answer model capped at 128 tokens:
+788 dialog turns, 304 questions), answer model capped at 128 tokens.
 
-| | conv-30 | conv-26 | combined |
-|---|---|---|---|
-| Questions | 105 | 199 | 304 |
-| **Mean F1** | 0.133 | 0.126 | **0.128** |
-| Oracle F1 (gold context) | 0.199 | 0.187 | **0.191** |
-| Turns ingested | 369 in 487 s | 419 in 532 s | — |
+| configuration | mean F1 | retrieval latency (median / p95) |
+|---|---|---|
+| top_k=5 | 0.128 | 59 ms / 109 ms |
+| **top_k=20** | **0.176** | 108 ms / 315 ms |
+| oracle — gold evidence, no retrieval | 0.191 | — |
 
-Retrieval latency, combined: **median 59 ms**, mean 87 ms, p95 109 ms.
+**0.176 is the headline number**, at `--top-k 20`. Getting there took three experiments, two
+of which refuted the hypothesis that motivated them; the sections below are in the order they
+happened, because the wrong turns are the useful part.
+
+The short version: retrieving 20 memories instead of 5 is worth +37% relative F1. It closes
+three-quarters of the distance between top_k=5 and an oracle handed the correct evidence
+outright, landing at 92% of that oracle's score. `top_k` was the lever the whole time — not the
+token cap, and not the answer model, which is where the first two rounds of evidence pointed.
 
 ### Raising the token cap made the score worse
 
@@ -99,39 +105,35 @@ sentence lifts combined F1 from 0.128 to 0.138: the gap is verbosity, not knowle
 the turns the dataset labels as each question's supporting `evidence`, keeping the prompt,
 model, and scorer identical. It needs no running services, only Bedrock.
 
-With perfect retrieval, combined F1 is **0.191** against 0.128 end-to-end. So the *entire*
-contribution retrieval could make, if it returned the gold evidence every single time, is
-about 0.06 F1 — and the ceiling it reveals is still 0.19. The answer model is the binding
-constraint, not recall.
+With perfect retrieval, combined F1 is **0.191** against 0.128 end-to-end at top_k=5. Read at
+the time, that looked conclusive: the entire contribution retrieval could make was ~0.06 F1,
+the ceiling was 0.19 either way, so the answer model had to be the binding constraint.
 
-Per category, combined, the split is sharper than the average suggests:
+That reading was wrong, and it is worth understanding why. The oracle context is *small* —
+1.3 evidence turns per question. It holds retrieval quality constant at "perfect" but also
+holds context quantity at "minimal", and those two are not separable in the result. A ceiling
+measured with 1.3 turns of context is not a ceiling on a retriever allowed to return 20.
 
-| Category | n | End-to-end | Oracle |
-|---|---|---|---|
-| single-hop | 114 | 0.181 | 0.326 |
-| multi-hop | 43 | 0.112 | 0.313 |
-| temporal | 63 | 0.139 | 0.085 |
-| open-domain | 13 | 0.059 | 0.085 |
-| adversarial | 71 | 0.056 | 0.014 |
-
-Two categories where the oracle scores *worse* than real retrieval, which is the interesting
-part:
+The clue was already visible in the per-category split, in the two categories where the oracle
+scores *worse* than ordinary retrieval:
 
 - **Temporal.** Asked "When was Jon in Paris?" with only the gold turn as context, the model
   answers `Jon was in Paris yesterday.` — gold is `28 January 2023`. It won't resolve a
-  relative reference against the session date sitting in its own context. Real retrieval
-  returns five memories with five date stamps, and the extra dates accidentally anchor it more
-  often than the single correct turn does. This is the capability LoCoMo was built to test,
-  and this model largely lacks it.
-- **Adversarial.** These have no answer; scoring 1.0 requires abstaining. Handed a plausible
-  distractor as its entire context, the model answers instead of declining, and drops to
-  0.014.
+  relative reference against the session date sitting in its own context. Ordinary retrieval
+  returns several memories with several date stamps, and those extra dates anchor it more often
+  than the single correct turn does. Oracle temporal F1 is 0.085; at top_k=20 it is 0.192.
+- **Adversarial.** These have no answer; scoring 1.0 requires abstaining. Handed a single
+  plausible distractor as its entire context, the model answers instead of declining and scores
+  0.014. More context gives it more chances to notice nothing supports an answer.
+
+Both say the same thing: for this model, context quantity is doing work independent of context
+precision. That is what made the oracle a floor rather than a ceiling.
 
 Numbers above are the raw completions, exactly as the official scorer sees them. The
 first-sentence figure is quoted once, explicitly labelled, and is *not* the protocol —
 `oracle_locomo.py` reports it alongside the raw score purely to separate "wrong" from "wordy".
 
-### Measuring retrieval on its own — where it turns out Engram is actually weak
+### Measuring retrieval on its own, which is what finally pointed at `top_k`
 
 F1 and the oracle both describe the *pipeline*. Neither says whether Engram returns the right
 memories, so `scripts/recall_locomo.py` measures that directly: every LoCoMo question ships
@@ -149,27 +151,34 @@ Over the same 304 questions (381 gold evidence turns):
 | k=10 | 0.371 | 0.338 |
 | k=20 | 0.566 | 0.517 |
 
-**This corrects the reading above.** At the top_k=5 the eval actually runs at, Engram surfaces
-at least one gold evidence turn for only 25% of questions. Retrieval is not fine — it was
-simply never the *visible* constraint, because an answer model capped at 0.19 F1 hides a
-retriever operating at 0.23 recall. Both are real, and F1 alone could not have told them apart.
+At the top_k=5 the eval had been running at, Engram surfaces at least one gold evidence turn
+for only 25% of questions. The decisive detail is where the right memory lands when it misses:
+of the 171 questions whose gold evidence appears anywhere in the top 20, the median rank of
+the first correct hit is **7** — just past the cutoff. The relevant memories were in the index
+and ranked plausibly, a handful of positions too low.
 
-The useful detail is where the right memory lands when it isn't in the top 5. Of the 171
-questions whose gold evidence appears anywhere in the top 20, the median rank of the first
-correct hit is **7** — just past the cutoff. So the relevant memories are usually *in* the
-index and ranked plausibly; they are being ranked a few positions too low. That is a ranking
-problem in the semantic/temporal/frequency blend, not a recall-from-storage problem, and it is
-the most actionable thing on this page.
+That is a ranking problem, not a storage or embedding problem, and it made the fix obvious:
+raise `top_k`. Doing so lifted F1 from 0.128 to 0.176 (+37% relative), improving *every*
+category, at a latency cost of median 59 → 108 ms and p95 109 → 315 ms.
 
-Per category at k=20, temporal recall is the *highest* (0.714) while temporal F1 is 0.139 —
-retrieval hands the model the right turns and the model still answers "yesterday". The two
-failures are independent.
+| Category | n | top_k=5 | top_k=20 | oracle | recall@20 |
+|---|---|---|---|---|---|
+| single-hop | 114 | 0.181 | **0.233** | 0.326 | 0.605 |
+| multi-hop | 43 | 0.112 | **0.205** | 0.313 | 0.325 |
+| temporal | 63 | 0.139 | **0.192** | 0.085 | 0.714 |
+| adversarial | 71 | 0.056 | **0.070** | 0.014 | 0.345 |
+| open-domain | 13 | 0.059 | **0.070** | 0.085 | 0.318 |
 
-The honest summary: this benchmark is measuring Mistral-7B's answer formatting and temporal
-reasoning far more than it is measuring Engram, *and* Engram's ranking is genuinely weak at
-k=5. Fixing either alone moves the headline number very little — the answer model caps it near
-0.19 and the retriever caps it near 0.23 recall. That is worth stating plainly rather than
-picking whichever half flatters the project.
+So where does that leave the project? Retrieval ranking is genuinely mediocre — recall@5 of
+0.233, and the score blend's weights were hand-picked and never evaluated against anything
+until `recall_locomo.py` existed. Compensating with a larger `top_k` works, but it is
+compensation: it buys F1 by handing the model more candidates rather than by ranking better,
+and it costs ~3x p95 latency. The honest framing is that Engram's *recall* is decent and its
+*precision at low k* is not, and this benchmark now has the instrument to tell those apart.
+
+The remaining gap from 0.176 to the low-0.2s is the answer model, and that part of the earlier
+conclusion stands: Mistral-7B writes 24-word prose against 5-word gold answers, and F1 punishes
+that regardless of what it is handed.
 
 The eval deliberately calls `bedrock_client.invoke_chat` directly rather than `/v1/chat`, so
 Engram's own prompt template and its `(relevance=0.70)` debug annotations don't contaminate
@@ -239,13 +248,18 @@ Stated plainly rather than hidden:
 - LoCoMo has been run on two conversations out of ten (304 of 1,986 questions). The oracle
   diagnostic now exists and says the answer model, not retrieval, is the ceiling — so the
   remaining eight conversations would sharpen the estimate without changing that conclusion.
-- Retrieval ranking is weak at the k the eval uses: recall@5 is 0.233, and the median rank of
-  the first correct memory is 7. The score blend has not been tuned at all — the weights in
-  `memory_pipeline` were picked by hand and never evaluated against `recall_locomo.py`, which
-  now exists precisely to do that.
-- Raising `--top-k` is the obvious next experiment and hasn't been run. recall@20 is 0.517,
-  more than double recall@5, but whether feeding 20 memories to a 7B model improves its answers
-  or just distracts it is an open question.
+- Ranking precision at low k is weak: recall@5 is 0.233, and the median rank of the first
+  correct memory is 7. The benchmark currently compensates with `--top-k 20`, which is a
+  workaround, not a fix. The score blend's weights were hand-picked and have never been tuned
+  against `recall_locomo.py`, which now exists precisely to do that — that tuning is the single
+  highest-value piece of work left on retrieval.
+- `top_k=20` triples p95 retrieval latency (109 ms → 315 ms) and sends 20 memories into every
+  prompt. Nothing here has measured the token cost of that, and for a real deployment the
+  prompt-size bill would likely matter more than the latency.
+- Only Mistral-7B has been tried as the answer model, so nothing here separates "Engram
+  retrieves badly" from "this model answers badly" at the top end. Re-running
+  `oracle_locomo.py` against a stronger model would settle it cheaply — it needs no services,
+  and the oracle path is the one where the answer model is the only variable.
 - No load testing, no HA or backup story for the three stateful stores.
 - No SDK — integration is raw HTTP today.
 - No billing or per-tenant metering (metrics are aggregate-only by design; it would have to

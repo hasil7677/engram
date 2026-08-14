@@ -136,31 +136,42 @@ def answer_question(api_key: str, user_id: str, question: dict, top_k: int, max_
     return answer, retrieval_latency
 
 
-def run_sample(sample: dict, top_k: int, pace_seconds: float, rate_limit_per_min: int, max_tokens: int) -> dict:
+def run_sample(sample: dict, top_k: int, pace_seconds: float, rate_limit_per_min: int, max_tokens: int,
+               skip_ingest: bool = False) -> dict:
     sample_id = sample["sample_id"]
     tenant_id = f"locomo_{sample_id}"
     api_key = f"locomo_key_{sample_id}"
     user_id = "eval"
 
-    print(f"[{sample_id}] registering tenant + erasing prior state...")
-    register_tenant(api_key, tenant_id)
+    if skip_ingest:
+        # Answering is ~8 minutes and ingesting is ~9, so re-asking the same
+        # questions against memories already in Engram (different --top-k, a
+        # different answer model) costs half as much. Deliberately skips the
+        # DELETE as well -- the whole point is to leave the stored memories
+        # alone, and erasing them here would silently make the run measure an
+        # empty index instead of failing loudly.
+        print(f"[{sample_id}] --skip-ingest: reusing memories already stored, nothing erased")
+        n_turns, ingest_time = 0, 0.0
+    else:
+        print(f"[{sample_id}] registering tenant + erasing prior state...")
+        register_tenant(api_key, tenant_id)
 
-    # The API loads the sentence-transformers model lazily, on the first embed. On a
-    # cold container that first write takes far longer than the normal 30s timeout, so
-    # do it once with a generous one -- otherwise the run dies on turn 1 and a real
-    # server-side failure is indistinguishable from a slow model load. The warmup
-    # memory is erased by the DELETE immediately below.
-    print(f"[{sample_id}] warming up the embedding model (first call loads it)...")
-    _request("POST", "/v1/memory", api_key, user_id, {"text": "warmup"}, timeout=600)
+        # The API loads the sentence-transformers model lazily, on the first embed. On a
+        # cold container that first write takes far longer than the normal 30s timeout, so
+        # do it once with a generous one -- otherwise the run dies on turn 1 and a real
+        # server-side failure is indistinguishable from a slow model load. The warmup
+        # memory is erased by the DELETE immediately below.
+        print(f"[{sample_id}] warming up the embedding model (first call loads it)...")
+        _request("POST", "/v1/memory", api_key, user_id, {"text": "warmup"}, timeout=600)
 
-    _request("DELETE", "/v1/memory", api_key, user_id)
+        _request("DELETE", "/v1/memory", api_key, user_id)
 
-    print(f"[{sample_id}] ingesting dialog turns (paced at {pace_seconds}s/req to respect "
-          f"the {rate_limit_per_min}/min rate limit)...")
-    t0 = time.perf_counter()
-    n_turns = ingest_conversation(api_key, user_id, sample, pace_seconds)
-    ingest_time = time.perf_counter() - t0
-    print(f"[{sample_id}] ingested {n_turns} turns in {ingest_time:.0f}s")
+        print(f"[{sample_id}] ingesting dialog turns (paced at {pace_seconds}s/req to respect "
+              f"the {rate_limit_per_min}/min rate limit)...")
+        t0 = time.perf_counter()
+        n_turns = ingest_conversation(api_key, user_id, sample, pace_seconds)
+        ingest_time = time.perf_counter() - t0
+        print(f"[{sample_id}] ingested {n_turns} turns in {ingest_time:.0f}s")
 
     results = []
     print(f"[{sample_id}] answering {len(sample['qa'])} QA questions...")
@@ -208,16 +219,25 @@ def report(all_results: list[dict]) -> None:
     ) / sum(len(run["results"]) for run in all_results)
     print(f"avg retrieval latency: {avg_retrieval_latency * 1000:.0f}ms")
     for run in all_results:
-        print(f"  {run['sample_id']}: {run['n_turns']} turns ingested in {run['ingest_time']:.0f}s")
+        if run["n_turns"]:
+            print(f"  {run['sample_id']}: {run['n_turns']} turns ingested in {run['ingest_time']:.0f}s")
+        else:
+            print(f"  {run['sample_id']}: reused already-stored memories (--skip-ingest)")
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--samples", type=str, default=None, help="comma-separated sample_ids, default: smallest conversation only")
-    parser.add_argument("--top-k", type=int, default=5)
+    # 20, not 5: recall@5 is 0.233 but recall@20 is 0.517, and the median rank of the
+    # first correct memory is 7 -- just past a top-5 cutoff. Raising this is worth +37%
+    # relative F1 (0.128 -> 0.176). Costs p95 retrieval latency, 109ms -> 315ms.
+    parser.add_argument("--top-k", type=int, default=20)
     parser.add_argument("--pace-seconds", type=float, default=1.1, help="delay between rate-limited requests")
     parser.add_argument("--max-tokens", type=int, default=128,
                         help="answer-model token cap; 32 truncated answers mid-word in earlier runs")
+    parser.add_argument("--skip-ingest", action="store_true",
+                        help="re-ask the questions against memories already stored, without "
+                             "erasing or re-ingesting; for comparing --top-k or answer models")
     parser.add_argument("--out", type=str, default=None, help="write full per-question results as JSON")
     args = parser.parse_args()
 
@@ -233,7 +253,8 @@ def main():
 
     print(f"Running LoCoMo eval on: {[s['sample_id'] for s in samples]}")
 
-    all_results = [run_sample(s, args.top_k, args.pace_seconds, 60, args.max_tokens) for s in samples]
+    all_results = [run_sample(s, args.top_k, args.pace_seconds, 60, args.max_tokens, args.skip_ingest)
+                   for s in samples]
 
     report(all_results)
 
