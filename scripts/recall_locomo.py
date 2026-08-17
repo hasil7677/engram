@@ -62,32 +62,41 @@ def build_text_to_dia_id(conv: dict) -> dict[str, str]:
     return index
 
 
-def run_sample(sample: dict, top_k: int, pace_seconds: float) -> dict:
+def run_sample(sample: dict, top_k: int, pace_seconds: float, use_graph_expansion: bool = True) -> dict:
     sample_id = sample["sample_id"]
     api_key = f"locomo_key_{sample_id}"
     user_id = "eval"
     text_to_dia = build_text_to_dia_id(sample["conversation"])
 
     print(f"[{sample_id}] searching {len(sample['qa'])} questions (top_k={top_k}, "
-          f"{len(text_to_dia)} turns ingested)...")
+          f"graph_expansion={use_graph_expansion}, {len(text_to_dia)} turns ingested)...")
 
     results = []
     unmatched_total = 0
     for i, q in enumerate(sample["qa"]):
         gold = [e for e in q.get("evidence", []) if e]
         resp = _request("POST", "/v1/memory/search", api_key, user_id,
-                        {"query": q["question"], "top_k": top_k, "use_graph_expansion": True})
-        retrieved, unmatched = [], 0
+                        {"query": q["question"], "top_k": top_k,
+                         "use_graph_expansion": use_graph_expansion})
+        retrieved, unmatched, components = [], 0, []
         for m in resp["memories"]:
             dia_id = text_to_dia.get(m["text"])
             if dia_id is None:
                 unmatched += 1
             retrieved.append(dia_id)
+            # Keep the three components, not just final_score. The blend weights are
+            # applied server-side, so recording the parts is what makes an offline
+            # weight sweep possible -- otherwise every candidate weighting costs
+            # another full search pass against the API.
+            components.append({
+                "semantic": m["semantic_score"], "temporal": m["temporal_score"],
+                "frequency": m["frequency_score"], "final": m["final_score"],
+            })
         unmatched_total += unmatched
 
         results.append({
             "category": q["category"], "question": q["question"],
-            "gold_evidence": gold, "retrieved": retrieved,
+            "gold_evidence": gold, "retrieved": retrieved, "components": components,
             "n_returned": len(resp["memories"]), "n_unmatched": unmatched,
         })
         if (i + 1) % 40 == 0:
@@ -101,7 +110,53 @@ def run_sample(sample: dict, top_k: int, pace_seconds: float) -> dict:
         print(f"[{sample_id}] WARNING: {unmatched_total} retrieved memories did not map "
               f"to a dia_id -- recall is understated; check the ingest format")
 
-    return {"sample_id": sample_id, "top_k": top_k, "results": results}
+    return {"sample_id": sample_id, "top_k": top_k,
+            "use_graph_expansion": use_graph_expansion, "results": results}
+
+
+def sweep(path: str) -> None:
+    """Re-rank a saved run under different blend weights, without re-searching.
+
+    The API applies the blend server-side, but each returned memory carries its
+    three components, and the blend is just a weighted sum -- so one search pass
+    makes every weighting testable offline. This is the feedback loop for tuning
+    settings.weight_*: capture once at a large --top-k, then sweep for free.
+
+    Exact for candidates already in the pool. A weighting different enough to
+    have pulled in a memory the captured run never returned is not represented,
+    so treat large deltas as directional and confirm with a fresh search.
+    """
+    runs = json.load(open(path, encoding="utf-8"))
+    rows = [r for run in runs for r in run["results"] if r.get("components")]
+    if not rows:
+        sys.exit(f"{path} has no component scores -- re-run recall_locomo.py to capture them")
+
+    configs = [(1.0, 0.0, 0.0), (0.9, 0.05, 0.05), (0.8, 0.1, 0.1),
+               (0.7, 0.2, 0.1), (0.6, 0.3, 0.1), (0.5, 0.3, 0.2)]
+
+    print("=" * 78)
+    print(f"Blend sweep over {len(rows)} questions (pool={len(rows[0]['components'])} per question)")
+    print("=" * 78)
+    print(f"  {'semantic/temporal/frequency':<30} {'recall@5':<11} {'recall@10':<11} {'recall@20':<11}")
+    for ws, wt, wf in configs:
+        cells = []
+        for k in (5, 10, 20):
+            scores = []
+            for r in rows:
+                gold = set(r["gold_evidence"])
+                if not gold:
+                    continue
+                ranked = sorted(
+                    zip(r["components"], r["retrieved"]),
+                    key=lambda p: -(p[0]["semantic"] * ws + p[0]["temporal"] * wt
+                                    + p[0]["frequency"] * wf),
+                )
+                top = {d for _, d in ranked[:k] if d is not None}
+                scores.append(len(gold & top) / len(gold))
+            cells.append(sum(scores) / len(scores))
+        label = f"{ws}/{wt}/{wf}" + ("   (as shipped)" if (ws, wt, wf) == (0.5, 0.3, 0.2) else "")
+        print(f"  {label:<30} {cells[0]:<11.4f} {cells[1]:<11.4f} {cells[2]:<11.4f}")
+    print("=" * 78)
 
 
 def _metrics(rows: list[dict], k: int) -> tuple[float, float]:
@@ -150,8 +205,19 @@ def main():
     parser.add_argument("--samples", type=str, default="conv-30,conv-26")
     parser.add_argument("--top-k", type=int, default=20)
     parser.add_argument("--pace-seconds", type=float, default=1.1)
+    parser.add_argument("--no-graph-expansion", action="store_true",
+                        help="search without one-hop graph expansion, to isolate its effect "
+                             "on ranking (expanded memories enter the pool with a hardcoded "
+                             "semantic score)")
     parser.add_argument("--out", type=str, default=None)
+    parser.add_argument("--sweep", type=str, default=None, metavar="RESULTS_JSON",
+                        help="skip searching; re-rank a saved results file under a range of "
+                             "blend weights and print recall@k for each")
     args = parser.parse_args()
+
+    if args.sweep:
+        sweep(args.sweep)
+        return
 
     data = json.load(open(DATA_FILE, encoding="utf-8"))
     wanted = set(args.samples.split(","))
@@ -159,7 +225,8 @@ def main():
     if not samples:
         sys.exit(f"no samples matched {sorted(wanted)}")
 
-    all_results = [run_sample(s, args.top_k, args.pace_seconds) for s in samples]
+    all_results = [run_sample(s, args.top_k, args.pace_seconds, not args.no_graph_expansion)
+                   for s in samples]
     report(all_results, args.top_k)
 
     if args.out:
