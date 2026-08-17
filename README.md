@@ -231,12 +231,57 @@ category, at a latency cost of median 59 → 108 ms and p95 109 → 315 ms.
 | adversarial | 71 | 0.056 | **0.070** | 0.014 | 0.345 |
 | open-domain | 13 | 0.059 | **0.070** | 0.085 | 0.318 |
 
-So where does that leave the project? Retrieval ranking is genuinely mediocre — recall@5 of
-0.233, and the score blend's weights were hand-picked and never evaluated against anything
-until `recall_locomo.py` existed. Compensating with a larger `top_k` works, but it is
-compensation: it buys F1 by handing the model more candidates rather than by ranking better,
-and it costs ~3x p95 latency. The honest framing is that Engram's *recall* is decent and its
-*precision at low k* is not, and this benchmark now has the instrument to tell those apart.
+Raising `top_k` is compensation, not a fix: it buys F1 by handing the model more candidates
+rather than by ranking better, and it costs ~3x p95 latency. So the next question was what the
+ranking is actually doing wrong.
+
+### The score blend, measured — the frequency term is the bug
+
+`recall_locomo.py` records the three score components per returned memory, not just the final
+score. Since the blend is a weighted sum, one search pass at `--top-k 50` makes every possible
+weighting testable offline: recompute, re-sort, re-score. Over the same 304 questions:
+
+| weights (semantic / temporal / frequency) | recall@5 |
+|---|---|
+| **0.5 / 0.3 / 0.2** — as shipped | 0.183 |
+| 0.5 / **0.0** / 0.2 — temporal removed | 0.183 |
+| 0.5 / 0.3 / **0.0** — frequency removed | **0.384** |
+| 1.0 / 0 / 0 — semantic only | 0.384 |
+
+**Removing the frequency term more than doubles recall@5, and removing the temporal term
+changes nothing at all** — not approximately nothing, exactly nothing. The median rank of the
+first correct memory goes from 13 to 4.
+
+Both results have the same cause, visible in the component distributions across all 15,200
+retrieved candidates:
+
+- **Temporal is inert here.** It ranges 0.9802 to 0.9888 — every LoCoMo memory was ingested
+  within the same few minutes, so temporal decay adds a near-identical ~0.295 to every score
+  and cannot reorder anything. That is a property of the benchmark, not a defect: `temporal_decay_score`
+  keys off *ingestion* time, and this corpus has no ingestion-time spread. **This benchmark
+  cannot evaluate temporal weighting, so none of this argues that weight is wrong in production.**
+- **Frequency is doing real damage.** It spans the full 0–1 at weight 0.2, while semantic spans
+  0.10–0.82 at weight 0.5 — a 0.20 swing against a 0.36 one. A frequently-retrieved irrelevant
+  memory therefore outranks a highly-relevant one that has never been retrieved.
+
+A third of the problem is upstream of the weights. One-hop graph expansion injects candidates
+into the pool with a **hardcoded semantic score of 0.5** (`memory_pipeline.py`), and those were
+24.2% of all candidates — while 43% of genuine semantic hits score *below* 0.5. Graph-expanded
+memories systematically outrank real matches. Dropping them lifts semantic-only recall@5 from
+0.384 to 0.408.
+
+### A caveat that applies to every recall number above
+
+Retrieval frequency is a **counter that search itself increments**, so the ranking function
+mutates every time it is used. 99.6% of candidates now carry a non-zero frequency score
+(median 0.26) accumulated across these eval runs — on a fresh ingest every one would be 0.0.
+
+This makes the benchmark order-dependent: each run re-ranks the next. It is part of why
+recall@5 measured 0.233 at `top_k=20` earlier and 0.183 at `top_k=50` here — some of that gap
+is the larger pool admitting more graph-injected candidates, and some is simply that the second
+measurement ran against a corpus the first one had already re-weighted. **Treat the recall
+figures as accurate to roughly ±0.05, not to three decimals**, until the eval resets frequency
+counters between runs.
 
 The remaining gap from 0.176 to the low-0.2s is the answer model, and that part of the earlier
 conclusion stands: Mistral-7B writes 24-word prose against 5-word gold answers, and F1 punishes
@@ -305,16 +350,26 @@ money per call is not.
 
 Stated plainly rather than hidden:
 
-- Celery Beat isn't wired into `docker-compose.yml`, so the L2/L3/L4 compression pipeline is
-  fully implemented but never fires automatically. Running the tasks by hand works.
+- The L2/L3/L4 compression pipeline is implemented, wired to a `celery_beat` service, and fires
+  `run_compression_pipeline` on a 86400s schedule; L2 and L3 have tests. What has *not* been
+  verified is its behaviour over real elapsed time — every run so far was triggered by hand with
+  timestamps forced, so the aging thresholds (`compression_l3_after_days`,
+  `compression_l4_after_days`) have never actually been crossed by the clock. L4 additionally
+  no-ops unless `S3_ARCHIVE_BUCKET` is set.
 - LoCoMo has been run on two conversations out of ten (304 of 1,986 questions). The oracle
   diagnostic now exists and says the answer model, not retrieval, is the ceiling — so the
   remaining eight conversations would sharpen the estimate without changing that conclusion.
-- Ranking precision at low k is weak: recall@5 is 0.233, and the median rank of the first
-  correct memory is 7. The benchmark currently compensates with `--top-k 20`, which is a
-  workaround, not a fix. The score blend's weights were hand-picked and have never been tuned
-  against `recall_locomo.py`, which now exists precisely to do that — that tuning is the single
-  highest-value piece of work left on retrieval.
+- **The frequency term in the score blend halves retrieval quality** (recall@5 0.384 → 0.183)
+  and nothing has been changed in response yet — the weights are still `0.5/0.3/0.2`. Cutting
+  the frequency weight is the single highest-value change available, and it is deliberately
+  left undone here because one synthetic benchmark shouldn't silently re-tune production
+  ranking. `--top-k 20` currently compensates for it.
+- **Graph expansion injects candidates at a hardcoded semantic score of 0.5**
+  (`memory_pipeline.py`), which outranks 43% of genuine semantic hits. It should carry a real
+  similarity score, or a calibrated penalty, rather than a constant.
+- **The eval is not reproducible run-to-run**: search increments retrieval-frequency counters,
+  so the ranking function mutates as the benchmark uses it. Until the harness resets those
+  counters per run, repeated measurements drift by roughly ±0.05 recall.
 - `top_k=20` triples p95 retrieval latency (109 ms → 315 ms) and sends 20 memories into every
   prompt. Nothing here has measured the token cost of that, and for a real deployment the
   prompt-size bill would likely matter more than the latency.
@@ -347,4 +402,11 @@ worked out.
 
 ## License
 
-MIT
+MIT — see `LICENSE`. That covers the code in this repository.
+
+It does **not** cover `benchmarks/locomo/locomo10.json`, which is the LoCoMo dataset
+redistributed here under **CC BY-NC 4.0** (non-commercial), along with `official_scoring.py`,
+adapted from the same source. Citation and attribution are in
+[`benchmarks/locomo/README.md`](benchmarks/locomo/README.md). If you vendor this repo into
+something commercial, delete `benchmarks/` — nothing under `app/` imports it, so the service
+itself stays MIT-clean. The scripts in `scripts/` that evaluate against it go too.
