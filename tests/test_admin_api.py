@@ -1,7 +1,6 @@
 from fastapi.testclient import TestClient
 
 from app.config import settings
-from app.core import tenant_store
 from app.main import app
 
 from .conftest import random_id, requires_services
@@ -30,7 +29,6 @@ def test_admin_api_rejects_wrong_key(tmp_path, monkeypatch):
 @requires_services
 def test_admin_can_create_a_working_tenant_and_revoke_it(tmp_path, monkeypatch):
     monkeypatch.setattr(settings, "admin_api_key", "correct-secret")
-    monkeypatch.setattr(tenant_store, "_DB_PATH", tmp_path / "audit.db")
     tenant_id = random_id("tenant")
     user = random_id("user")
     admin_headers = {"X-Admin-Key": "correct-secret"}

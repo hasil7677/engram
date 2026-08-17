@@ -10,11 +10,16 @@ from app.api.admin_routes import router as admin_router
 from app.api.routes import router
 from app.core.metrics import http_request_duration_seconds, http_requests_total
 from app.db.neo4j_client import ensure_constraints
+from app.db.postgres import init_schema
 from app.db.qdrant_client import ensure_collection
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Control plane first: if the tenants/api_keys tables aren't there, every
+    # authenticated route 503s anyway, so there's no point warming the memory
+    # engines behind a broken front door.
+    init_schema()
     ensure_collection()
     ensure_constraints()
     yield

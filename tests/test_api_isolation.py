@@ -12,15 +12,15 @@ from app.main import app
 from .conftest import random_id, requires_services
 
 
+# Tenants/keys live in Postgres now, not a per-test sqlite file, so isolation
+# between tests comes from random_id() rather than a tmp_path swap.
 def _register(tmp_path, monkeypatch, api_key: str, tenant_id: str) -> None:
-    monkeypatch.setattr(tenant_store, "_DB_PATH", tmp_path / "audit.db")
     tenant_store.register_tenant_key(api_key, tenant_id)
 
 
 @requires_services
 def test_two_tenants_via_api_never_see_each_others_memories(tmp_path, monkeypatch):
     key_a, key_b = random_id("key"), random_id("key")
-    monkeypatch.setattr(tenant_store, "_DB_PATH", tmp_path / "audit.db")
     tenant_store.register_tenant_key(key_a, random_id("tenant"))
     tenant_store.register_tenant_key(key_b, random_id("tenant"))
 
@@ -60,7 +60,6 @@ def test_two_tenants_via_api_never_see_each_others_memories(tmp_path, monkeypatc
 
 @requires_services
 def test_unregistered_api_key_is_rejected(tmp_path, monkeypatch):
-    monkeypatch.setattr(tenant_store, "_DB_PATH", tmp_path / "audit.db")
 
     with TestClient(app) as client:
         resp = client.post(
@@ -88,7 +87,6 @@ def test_empty_user_id_is_rejected(tmp_path, monkeypatch):
 @requires_services
 def test_delete_memory_across_tenants_returns_404_and_does_not_delete(tmp_path, monkeypatch):
     key_a, key_b = random_id("key"), random_id("key")
-    monkeypatch.setattr(tenant_store, "_DB_PATH", tmp_path / "audit.db")
     tenant_store.register_tenant_key(key_a, random_id("tenant"))
     tenant_store.register_tenant_key(key_b, random_id("tenant"))
 
@@ -118,7 +116,6 @@ def test_delete_memory_across_tenants_returns_404_and_does_not_delete(tmp_path, 
 @requires_services
 def test_update_memory_across_tenants_returns_404_and_does_not_supersede(tmp_path, monkeypatch):
     key_a, key_b = random_id("key"), random_id("key")
-    monkeypatch.setattr(tenant_store, "_DB_PATH", tmp_path / "audit.db")
     tenant_store.register_tenant_key(key_a, random_id("tenant"))
     tenant_store.register_tenant_key(key_b, random_id("tenant"))
 
@@ -150,7 +147,6 @@ def test_update_memory_across_tenants_returns_404_and_does_not_supersede(tmp_pat
 @requires_services
 def test_export_only_returns_this_tenant_and_users_own_records(tmp_path, monkeypatch):
     key_a, key_b = random_id("key"), random_id("key")
-    monkeypatch.setattr(tenant_store, "_DB_PATH", tmp_path / "audit.db")
     tenant_store.register_tenant_key(key_a, random_id("tenant"))
     tenant_store.register_tenant_key(key_b, random_id("tenant"))
 

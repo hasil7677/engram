@@ -10,10 +10,30 @@ x-container-env: &container-env
   QDRANT_HOST: qdrant
   REDIS_HOST: redis
   NEO4J_URI: bolt://neo4j:7687
+  DATABASE_URL: postgresql://engram:engram_dev_password@postgres:5432/engram
   CELERY_BROKER_URL: redis://redis:6379/1
   CELERY_RESULT_BACKEND: redis://redis:6379/2
 
 services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=engram
+      - POSTGRES_PASSWORD=engram_dev_password
+      - POSTGRES_DB=engram
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # The API calls init_schema() at startup, so it needs Postgres actually
+    # accepting connections — not merely started, which is all a bare
+    # depends_on guarantees.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U engram -d engram"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
   qdrant:
     image: qdrant/qdrant:latest
     ports:
@@ -50,9 +70,14 @@ services:
     environment:
       <<: *container-env
     depends_on:
-      - qdrant
-      - redis
-      - neo4j
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+      redis:
+        condition: service_started
+      neo4j:
+        condition: service_started
     volumes:
       - ./app:/app/app
 
@@ -64,9 +89,14 @@ services:
     environment:
       <<: *container-env
     depends_on:
-      - qdrant
-      - redis
-      - neo4j
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+      redis:
+        condition: service_started
+      neo4j:
+        condition: service_started
     volumes:
       - ./app:/app/app
 
@@ -78,9 +108,14 @@ services:
     environment:
       <<: *container-env
     depends_on:
-      - qdrant
-      - redis
-      - neo4j
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+      redis:
+        condition: service_started
+      neo4j:
+        condition: service_started
     volumes:
       - ./app:/app/app
 
@@ -88,3 +123,4 @@ volumes:
   qdrant_data:
   redis_data:
   neo4j_data:
+  postgres_data:

@@ -28,7 +28,7 @@ docker compose up --build
 Register a tenant, then write and read a memory:
 
 ```bash
-docker compose exec api python scripts/register_tenant.py mykey123 tenant_demo
+docker compose exec api python scripts/register_tenant.py tenant_demo mykey123
 
 curl -X POST http://localhost:8000/v1/memory \
   -H "X-API-Key: mykey123" -H "X-User-Id: user_1" -H "Content-Type: application/json" \
@@ -38,6 +38,65 @@ curl -X POST http://localhost:8000/v1/memory/search \
   -H "X-API-Key: mykey123" -H "X-User-Id: user_1" -H "Content-Type: application/json" \
   -d '{"query": "what is Anish working on?"}'
 ```
+
+Drop the `mykey123` argument to get a real server-generated key instead — the
+fixed-key form is a local convenience so the curl examples above stay copy-pasteable.
+
+Upgrading an existing checkout? Tenants, API keys and the audit log used to live in a
+local `audit.db` sqlite file and now live in Postgres. Move them across before first
+boot; existing keys keep working, since the hash scheme is unchanged:
+
+```bash
+python scripts/migrate_sqlite_to_postgres.py            # dry run, prints counts
+python scripts/migrate_sqlite_to_postgres.py --commit
+```
+
+### Key rotation and suspension
+
+API keys are per-tenant *rows*, not one-per-tenant, which is what makes rotation
+zero-downtime: issue → deploy → retire, with both keys valid in the middle.
+
+```bash
+# 1. issue a second key; the current one keeps working
+curl -X POST http://localhost:8000/v1/admin/tenants/tenant_demo/keys \
+  -H "X-Admin-Key: <ADMIN_API_KEY>" -H "Content-Type: application/json" \
+  -d '{"name": "rotation-2026-08", "expires_in_days": 90}'
+
+# 2. deploy the new key, then check the old one has actually gone quiet
+curl http://localhost:8000/v1/admin/tenants/tenant_demo/keys -H "X-Admin-Key: <ADMIN_API_KEY>"
+#    -> per key: prefix, name, created_at, last_used_at, expires_at, active
+
+# 3. retire the old one by id
+curl -X DELETE http://localhost:8000/v1/admin/tenants/tenant_demo/keys/<key_id> \
+  -H "X-Admin-Key: <ADMIN_API_KEY>"
+```
+
+Suspension is separate from revocation, and reversible — pausing a tenant leaves their
+keys intact, so reactivating resumes service with no re-integration:
+
+```bash
+curl -X PUT http://localhost:8000/v1/admin/tenants/tenant_demo/status \
+  -H "X-Admin-Key: <ADMIN_API_KEY>" -H "Content-Type: application/json" \
+  -d '{"status": "suspended"}'   # active | suspended | deleted
+```
+
+Revocation is soft throughout: a revoked key is marked, never deleted, because the
+record that a key existed and when it was retired is exactly what an incident review
+needs to read afterwards.
+
+### Security boundary — the one thing to read before wrapping this in an SDK
+
+`X-API-Key` identifies the **tenant** (the developer). `X-User-Id` identifies an
+end-user *inside* that tenant, and is **asserted by the caller, not authenticated**.
+That's the right design for a server-side SDK, where the tenant's own backend is
+trusted. It also means:
+
+> **The API key must never ship in a browser, a mobile app, or any client you don't
+> control.** Anyone holding it can pass any `X-User-Id` and read every end-user's
+> memories under that tenant.
+
+Client-side use needs short-lived per-user tokens minted by the tenant's backend.
+That doesn't exist here — it's the gate on a browser SDK, not a detail to add later.
 
 Also available: `POST /v1/chat` (recall → prompt with context → streamed Bedrock reply →
 persist the turn), `PUT /v1/memory/{id}` (supersede), `GET /v1/memory/{id}/history` (version
@@ -54,13 +113,16 @@ working, rather than inferring it from curl.
 ```bash
 pip install -r requirements-dev.txt
 python -m spacy download en_core_web_sm   # entity extraction; not a pip dependency
-docker compose up qdrant redis neo4j      # api/celery_worker not needed
+docker compose up qdrant redis neo4j postgres   # api/celery_worker not needed
 pytest
 ```
 
-34 tests, all passing against live services. 5 run with no external services; the rest
-exercise real cross-tenant isolation against live Qdrant/Redis/Neo4j and auto-skip cleanly if
-those aren't reachable — so check for skips before reading a green run as meaningful.
+Every test now needs live services and auto-skips cleanly when they aren't reachable — so
+check for skips before reading a green run as meaningful. `tests/test_tenant_store.py` used
+to be the exception (pure sqlite, ran anywhere); it moved to Postgres along with the store
+itself, and that was the right trade, because what it asserts — partial revoke, expiry,
+suspension — is enforced by database constraints and `now()`, so testing it against a fake
+would only have tested the fake.
 `tests/test_retrieval_quality.py` is a recall@5 eval over a fixed fact/query set — the only
 test that checks retrieval finds the *right* thing rather than just that isolation holds.
 

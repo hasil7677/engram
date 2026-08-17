@@ -18,7 +18,6 @@ def test_metrics_endpoint_exposes_prometheus_text_format():
 @requires_services
 def test_http_requests_are_labeled_by_route_template_not_raw_memory_id(tmp_path, monkeypatch):
     key = random_id("key")
-    monkeypatch.setattr(tenant_store, "_DB_PATH", tmp_path / "audit.db")
     tenant_store.register_tenant_key(key, random_id("tenant"))
     user = random_id("user")
 

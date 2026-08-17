@@ -13,6 +13,16 @@ class Settings(BaseSettings):
     neo4j_user: str = "neo4j"
     neo4j_password: str = "engram_dev_password"
 
+    # Control plane (tenants, API keys, audit log) — see app/db/postgres.py for
+    # why this is Postgres and not one of the three memory engines.
+    database_url: str = "postgresql://engram:engram_dev_password@localhost:5432/engram"
+    postgres_pool_max_size: int = 10
+    postgres_pool_timeout_seconds: float = 5.0
+    # How stale api_keys.last_used_at may get. Writing it on every request would
+    # turn each authenticated read into a write; a minute of staleness is
+    # irrelevant for "when was this key last seen" and costs ~1 write/key/min.
+    api_key_last_used_throttle_seconds: int = 60
+
     aws_region: str = "us-east-1"
     aws_access_key_id: str = ""
     aws_secret_access_key: str = ""

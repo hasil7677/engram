@@ -38,7 +38,6 @@ def test_rate_limit_is_scoped_per_tenant(monkeypatch):
 def test_api_returns_429_once_tenant_exceeds_limit(tmp_path, monkeypatch):
     monkeypatch.setattr(settings, "rate_limit_per_minute", 2)
     key = random_id("key")
-    monkeypatch.setattr(tenant_store, "_DB_PATH", tmp_path / "audit.db")
     tenant_store.register_tenant_key(key, random_id("tenant"))
     user = random_id("user")
 

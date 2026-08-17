@@ -5,6 +5,8 @@ pydantic-settings==2.5.2
 qdrant-client==1.11.3
 redis==5.0.8
 neo4j==5.24.0
+psycopg[binary]==3.2.3
+psycopg-pool==3.2.3
 celery==5.4.0
 spacy==3.7.5
 # sentence-transformers pulls torch transitively. torch was previously unpinned, so a
