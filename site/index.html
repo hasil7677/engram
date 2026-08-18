@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Engram: multi-tenant memory middleware for LLM apps</title>
+<meta name="description" content="The backend that lets a chatbot remember a user across sessions. Cloud-hosted, multi-tenant, MIT licensed.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧩</text></svg>">
+<style>
+  :root{
+    --bg:#0b0d10;
+    --bg2:#12151a;
+    --panel:#161a20;
+    --border:#262b33;
+    --text:#e7e9ec;
+    --muted:#9aa3af;
+    --accent:#5ea1f6;
+    --accent2:#5ecbb0;
+    --mono:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:radial-gradient(1200px 600px at 50% -10%, #10233a 0%, var(--bg) 55%);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent2);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px}
+  header.hero{padding:96px 0 56px;text-align:center}
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;color:var(--muted);
+    border:1px solid var(--border);border-radius:999px;
+    padding:6px 14px;margin-bottom:28px;
+    background:rgba(255,255,255,0.02);
+  }
+  .badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent2)}
+  h1{
+    font-size:clamp(40px,7vw,64px);
+    margin:0 0 18px;
+    font-weight:700;
+    letter-spacing:-0.02em;
+    background:linear-gradient(135deg,#fff 30%,#c2d9ff 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .tagline{
+    font-size:clamp(17px,2.4vw,21px);
+    color:var(--muted);
+    max-width:640px;
+    margin:0 auto 36px;
+  }
+  .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 22px;border-radius:10px;font-size:15px;font-weight:600;
+    border:1px solid var(--border);
+  }
+  .btn.primary{background:var(--accent);color:#0b0d10;border-color:var(--accent)}
+  .btn.primary:hover{background:#7fb6f8;text-decoration:none}
+  .btn.ghost{color:var(--text);background:rgba(255,255,255,0.03)}
+  .btn.ghost:hover{background:rgba(255,255,255,0.07);text-decoration:none}
+
+  section{padding:64px 0;border-top:1px solid var(--border)}
+  .kicker{
+    font-family:var(--mono);font-size:13px;color:var(--accent2);
+    text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;
+  }
+  h2{font-size:clamp(24px,3.5vw,32px);margin:0 0 14px;letter-spacing:-0.01em}
+  .lede{color:var(--muted);max-width:640px;font-size:16px;margin-bottom:40px}
+
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  @media (max-width:760px){.grid3,.grid4{grid-template-columns:1fr}}
+  @media (max-width:900px) and (min-width:761px){.grid4{grid-template-columns:repeat(2,1fr)}}
+  .card{
+    background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    padding:24px;
+  }
+  .card h3{margin:0 0 8px;font-size:16px}
+  .card p{margin:0;color:var(--muted);font-size:14.5px}
+
+  .stat-row{display:flex;gap:24px;flex-wrap:wrap;align-items:stretch;margin-bottom:22px}
+  .stat{
+    flex:1;min-width:220px;
+    background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    padding:28px;text-align:center;
+  }
+  .stat .num{
+    font-family:var(--mono);font-size:44px;font-weight:700;color:var(--accent2);
+    display:block;margin-bottom:6px;
+  }
+  .stat .label{color:var(--muted);font-size:14px}
+  .fine{color:var(--muted);font-size:14px;margin-top:22px;max-width:680px}
+  .fine code{font-family:var(--mono);background:var(--bg2);padding:2px 6px;border-radius:4px;font-size:13px}
+
+  .checklist{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+  .checklist li{
+    display:flex;gap:12px;align-items:flex-start;
+    background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    padding:18px 20px;
+  }
+  .checklist .mark{
+    flex:none;width:22px;height:22px;border-radius:50%;
+    background:rgba(94,203,176,0.15);color:var(--accent2);
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:700;margin-top:1px;
+  }
+  .checklist strong{color:var(--text)}
+  .checklist span.detail{color:var(--muted);font-size:14.5px}
+
+  .quickstart{
+    background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+    padding:22px 24px;font-family:var(--mono);font-size:14px;color:var(--text);
+    overflow-x:auto;white-space:pre;
+  }
+  .quickstart .comment{color:var(--muted)}
+
+  footer{padding:48px 0 80px;text-align:center;color:var(--muted);font-size:14px}
+  footer .links{display:flex;gap:20px;justify-content:center;margin-bottom:18px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="badge"><span class="dot"></span>cloud-hosted, multi-tenant, MIT licensed</div>
+    <h1>Give your chatbot memory<br>across sessions.</h1>
+    <p class="tagline">A FastAPI service that stores conversational facts and hands back relevant context, so an agent can appear to remember a user without you building the plumbing yourself.</p>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/hasil7677/engram">View on GitHub</a>
+      <a class="btn ghost" href="https://github.com/hasil7677/engram#run-it">Quickstart</a>
+    </div>
+  </header>
+
+  <section id="benchmark" style="padding-top:0;border-top:none">
+    <div class="kicker">LoCoMo benchmark, full dataset</div>
+    <h2>The real number, all ten conversations.</h2>
+    <div class="stat-row">
+      <div class="stat">
+        <span class="num">10/10</span>
+        <span class="label">LoCoMo conversations run, official dataset</span>
+      </div>
+      <div class="stat">
+        <span class="num">1,986</span>
+        <span class="label">questions scored, no subset shortcuts</span>
+      </div>
+      <div class="stat">
+        <span class="num">0.166</span>
+        <span class="label">F1, strict word-overlap scoring</span>
+      </div>
+    </div>
+    <p class="fine">That's the official, harsh unigram-overlap F1 the LoCoMo paper itself uses, not a lenient LLM-judge score. The README's full writeup includes the two experiments that made the number worse before the one that actually moved it, and a ranking bug the benchmark itself found and that's now fixed in code. Nothing here is dressed up.</p>
+  </section>
+
+  <section id="why">
+    <div class="kicker">four stores, each doing one job</div>
+    <h2>Not a framework. Four boring, well-chosen pieces.</h2>
+    <p class="lede">Multi-tenancy resolved server-side from a hashed API key, one pooled collection with payload-filter isolation, an audit log on every access. Cloud-first by design, not a deployment detail bolted on later.</p>
+    <div class="grid4">
+      <div class="card">
+        <h3>Qdrant</h3>
+        <p>Semantic memory. Every fact embedded locally, cosine similarity, one pooled collection across tenants.</p>
+      </div>
+      <div class="card">
+        <h3>Redis</h3>
+        <p>Working memory: last 10 turns, retrieval-frequency counters, a short-lived semantic query cache.</p>
+      </div>
+      <div class="card">
+        <h3>Neo4j</h3>
+        <p>Entities and LLM-extracted relationships, powering one-hop graph expansion at recall time.</p>
+      </div>
+      <div class="card">
+        <h3>Postgres</h3>
+        <p>The control plane: tenants, API keys, audit log. Survived the move off a sqlite file that couldn't handle a second replica.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="security">
+    <div class="kicker">verified live, not just by reading the code</div>
+    <h2>Tested against a running instance.</h2>
+    <p class="lede">Memory systems are the textbook case for prompt injection: anything a user says gets stored and replayed into every future prompt. Rather than just reasoning about it, these were run as real attacks against the live API.</p>
+    <ul class="checklist">
+      <li>
+        <span class="mark">&#10003;</span>
+        <div><strong>Cross-tenant isolation held under attack.</strong> <span class="detail">Wrote a secret memory as one tenant, then tried to read, delete, and search for it as a second tenant with a real API key. All three blocked, original data untouched.</span></div>
+      </li>
+      <li>
+        <span class="mark">&#10003;</span>
+        <div><strong>A real injection payload, fenced and defused.</strong> <span class="detail">Injected a memory forging a fake conversation turn plus an instruction-override attempt. The sanitizer broke the fake turn boundary before it reached the prompt, and the model declined to comply end to end.</span></div>
+      </li>
+      <li>
+        <span class="mark">&#10003;</span>
+        <div><strong>Admin surface fails closed.</strong> <span class="detail">No admin key configured means no admin access, verified with a live request, not an assumption.</span></div>
+      </li>
+      <li>
+        <span class="mark">&#10003;</span>
+        <div><strong>Rate limiting actually limits.</strong> <span class="detail">70 rapid requests against one tenant: exactly 60 succeeded, the rest got a 429.</span></div>
+      </li>
+    </ul>
+    <p class="fine">Full write-up, including the one dependency finding that's documented but not yet patched, is in the README under <code>Verified live</code> and <code>Known gaps</code>.</p>
+  </section>
+
+  <section id="quickstart">
+    <div class="kicker">setup</div>
+    <h2>One command, real services.</h2>
+    <div class="quickstart"><span class="comment"># fill in AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY first</span>
+cp .env.example .env
+docker compose up --build</div>
+    <p class="fine">Qdrant, Redis, Neo4j, and Postgres in one compose file. Register a tenant, write a memory, search for it, all documented in the README with copy-pasteable curl examples.</p>
+  </section>
+
+  <footer>
+    <div class="links">
+      <a href="https://github.com/hasil7677/engram">GitHub</a>
+      <a href="https://github.com/hasil7677/engram#the-decisions-worth-reading">The decisions worth reading</a>
+      <a href="https://github.com/hasil7677/engram#known-gaps">Known gaps</a>
+      <a href="https://github.com/hasil7677/engram/blob/main/LICENSE">MIT License</a>
+    </div>
+    Engram. Multi-tenant memory middleware for LLM apps.
+  </footer>
+</div>
+
+</body>
+</html>
