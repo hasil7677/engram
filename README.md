@@ -166,6 +166,10 @@ prompt templates verbatim and its own F1 scorer. Two conversations (`conv-30` an
 of which refuted the hypothesis that motivated them; the sections below are in the order they
 happened, because the wrong turns are the useful part.
 
+*(This F1 table predates the bump-timing and graph-expansion fixes described below in "Re-measured
+after fixing..." — those change ranking, not retrieval count, so the qualitative story here should
+hold, but the exact numbers haven't been re-run through the full answer-model pipeline.)*
+
 The short version: retrieving 20 memories instead of 5 is worth +37% relative F1. It closes
 three-quarters of the distance between top_k=5 and an oracle handed the correct evidence
 outright, landing at 92% of that oracle's score. `top_k` was the lever the whole time — not the
@@ -293,6 +297,36 @@ into the pool with a **hardcoded semantic score of 0.5** (`memory_pipeline.py`),
 memories systematically outrank real matches. Dropping them lifts semantic-only recall@5 from
 0.384 to 0.408.
 
+### Re-measured after fixing the bump-timing and graph-expansion bugs
+
+The two bugs above are now fixed in code (frequency bumps only the memories that
+survive `top_k` truncation; graph-expanded candidates get a real cosine score
+instead of a constant 0.5). Re-running the capture at `--top-k 50` against a
+**freshly flushed** frequency store — not the months of accumulated contamination
+the numbers above were measured under — gives:
+
+| weights (semantic / temporal / frequency) | recall@5 | recall@10 | recall@20 |
+|---|---|---|---|
+| 1.0 / 0.0 / 0.0 — semantic only | **0.412** | 0.510 | 0.603 |
+| 0.9 / 0.05 / 0.05 | 0.386 | 0.481 | 0.594 |
+| 0.8 / 0.1 / 0.1 | 0.337 | 0.458 | 0.563 |
+| 0.7 / 0.2 / 0.1 | 0.329 | 0.445 | 0.546 |
+| 0.6 / 0.3 / 0.1 | 0.322 | 0.430 | 0.532 |
+| 0.5 / 0.3 / 0.2 — as shipped | 0.144 | 0.271 | 0.434 |
+
+The conclusion doesn't change, it sharpens: recall degrades **monotonically** as
+frequency weight rises, with a cliff at the shipped 0.2 — every intermediate
+point tried (0.05–0.1) recovers most of the gap to semantic-only, so the damage
+is disproportionate to the weight, not linear in it. Both code fixes are real
+improvements (the bump now means what it claims to, graph expansion is no
+longer over-ranked), but neither rescues the frequency term itself, because the
+root cause was never the bugs — it's that LoCoMo ingests everything at once and
+asks each question once, so no memory has an access history for frequency to
+legitimately reflect. `weight_frequency` stays at 0.2 anyway, for the same
+reason as before: this is one synthetic benchmark, structurally incapable of
+telling frequency's production value from its LoCoMo-specific harm, and that
+isn't grounds to silently re-tune a production weight.
+
 ### A caveat that applies to every recall number above
 
 Retrieval frequency is a **counter that search itself increments**, so the ranking function
@@ -389,14 +423,15 @@ Stated plainly rather than hidden:
   returned, before the `top_k` truncation — so memories pushed out by graph expansion and
   never shown to anyone still counted as "retrieved". It now fires only on the memories that
   survive truncation, so the counter means "this was actually returned" instead of "this was
-  a candidate." That's a fix to what the signal measures, not to the weight, and the benchmark
-  numbers above predate it — they'd need a re-run to reflect it. `--top-k 20` still compensates
-  for whatever gap remains.
+  a candidate." That's a fix to what the signal measures, not to the weight — and it's been
+  re-measured (see "Re-measured after fixing the bump-timing and graph-expansion bugs" above):
+  the conclusion holds, more starkly than before. `--top-k 20` still compensates for the gap.
 - **Graph expansion used to inject candidates at a hardcoded semantic score of 0.5**
   (`memory_pipeline.py`), which outranked 43% of genuine semantic hits. It now batch-retrieves
   each expanded candidate's stored vector from Qdrant and scores it by real cosine similarity
-  against the query, falling back to 0.5 only if a vector is unexpectedly missing. Also not yet
-  re-measured against the benchmark above.
+  against the query, falling back to 0.5 only if a vector is unexpectedly missing. Both this and
+  the bump-timing fix are baked into the re-measurement above — it's the combined effect of the
+  two, not either one in isolation.
 - **Prompt injection via stored memory content** — see "Prompt injection via stored memories"
   under Security boundary. Fenced and sanitized, not eliminated; still the top open risk here.
 - **The eval is not reproducible run-to-run**: search increments retrieval-frequency counters,
