@@ -153,8 +153,34 @@ test that checks retrieval finds the *right* thing rather than just that isolati
 
 `scripts/eval_locomo.py` runs Engram as the retriever against the official
 [LoCoMo](https://arxiv.org/abs/2402.17753) dataset (ACL 2024), using the benchmark's own QA
-prompt templates verbatim and its own F1 scorer. Two conversations (`conv-30` and `conv-26`,
-788 dialog turns, 304 questions), answer model capped at 128 tokens.
+prompt templates verbatim and its own F1 scorer.
+
+### Full dataset (all 10 conversations, 1,986 questions)
+
+All ten conversations, `top_k=20`, answer model capped at 128 tokens, run against the code with
+the bump-timing and graph-expansion fixes in place (see Known gaps). 6 of 1,986 questions hit a
+transient connection blip and scored 0.0 (0.3%; see the retry note in `eval_locomo.py`'s
+`_request`) — negligible, but the number below is very slightly conservative because of it.
+
+| category | n | mean F1 |
+|---|---|---|
+| single-hop | 841 | 0.225 |
+| multi-hop | 282 | 0.194 |
+| temporal | 321 | 0.168 |
+| open-domain | 96 | 0.093 |
+| adversarial | 446 | 0.049 |
+| **OVERALL** | **1,986** | **0.166** |
+
+Average retrieval latency: 103ms. This lands close to the 0.176 two-conversation estimate below
+(within the category-level noise you'd expect from a 6.5x larger, differently-composed sample) —
+the two-conversation number was never wrong, just imprecise, and this is what it converges to at
+full scale.
+
+### The two-conversation exploration that found the top_k lever
+
+The full run above confirms the conclusion; this section is kept because *how* it was found is
+the more useful part. Two conversations (`conv-30` and `conv-26`, 788 dialog turns, 304
+questions), answer model capped at 128 tokens.
 
 | configuration | mean F1 | retrieval latency (median / p95) |
 |---|---|---|
@@ -162,9 +188,12 @@ prompt templates verbatim and its own F1 scorer. Two conversations (`conv-30` an
 | **top_k=20** | **0.176** | 108 ms / 315 ms |
 | oracle — gold evidence, no retrieval | 0.191 | — |
 
-**0.176 is the headline number**, at `--top-k 20`. Getting there took three experiments, two
-of which refuted the hypothesis that motivated them; the sections below are in the order they
-happened, because the wrong turns are the useful part.
+**0.176 was the headline number** on this subset, at `--top-k 20`. Getting there took three
+experiments, two of which refuted the hypothesis that motivated them; the sections below are in
+the order they happened, because the wrong turns are the useful part. (The oracle and top_k=5
+rows haven't been re-run at full scale — the full run above deliberately extends only the
+as-shipped top_k=20 configuration to all ten conversations. Nothing here suggests those
+comparisons would look qualitatively different at 10 conversations, only more precise.)
 
 *(This F1 table predates the bump-timing and graph-expansion fixes described below in "Re-measured
 after fixing..." — those change ranking, not retrieval count, so the qualitative story here should
@@ -413,9 +442,12 @@ Stated plainly rather than hidden:
   timestamps forced, so the aging thresholds (`compression_l3_after_days`,
   `compression_l4_after_days`) have never actually been crossed by the clock. L4 additionally
   no-ops unless `S3_ARCHIVE_BUCKET` is set.
-- LoCoMo has been run on two conversations out of ten (304 of 1,986 questions). The oracle
-  diagnostic now exists and says the answer model, not retrieval, is the ceiling — so the
-  remaining eight conversations would sharpen the estimate without changing that conclusion.
+- LoCoMo has now been run on all ten conversations at the shipped `top_k=20` configuration (see
+  Benchmark above) — overall F1 0.166 on the full 1,986 questions, in line with the 0.176
+  estimate the two-conversation subset gave. The oracle and top_k=5 comparisons, which say the
+  answer model rather than retrieval is the ceiling, are still only measured on the
+  two-conversation subset; nothing here suggests they'd look qualitatively different at full
+  scale, only more precise.
 - **The frequency term in the score blend halves retrieval quality** (recall@5 0.384 → 0.183),
   and the weights are still `0.5/0.3/0.2` — that number itself is deliberately left untouched,
   because one synthetic benchmark shouldn't silently re-tune production ranking. What *has*
