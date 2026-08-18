@@ -98,6 +98,29 @@ trusted. It also means:
 Client-side use needs short-lived per-user tokens minted by the tenant's backend.
 That doesn't exist here — it's the gate on a browser SDK, not a detail to add later.
 
+### Prompt injection via stored memories — real, and only partially mitigated
+
+Retrieved memory text is interpolated into the chat prompt built for `/v1/chat`
+(`build_context_string` in `app/core/memory_pipeline.py`, consumed by
+`CHAT_PROMPT_TEMPLATE` in `app/core/chat.py`). Memories are fenced with delimiters
+and have newlines/turn markers stripped before insertion (see `_sanitize_for_prompt`
+in `memory_pipeline.py`) — enough to stop a memory from forging a fake `User:`/
+`Assistant:` turn boundary, but fencing is defence-in-depth, not a solved problem:
+a sufficiently creative payload inside the fence can still try to talk the model
+into ignoring the fence's own instructions.
+
+It's a *persistent* injection risk, not a one-shot one: `stream_chat_reply` persists
+both turns of every chat exchange, so a user's own message becomes a stored memory
+that's retrieved into every future prompt. Say the adversarial thing once and it's
+durable. It also propagates into the L2/L3 compression summaries, since those
+prompts are built from the same memory text — a payload can get laundered into a
+long-term summary, where it's harder to spot.
+
+Blast radius connects to the boundary above: since `X-User-Id` is asserted, not
+authenticated, anyone holding a tenant's API key can write memories to *any*
+`user_id` under that tenant — so a compromised key can poison an arbitrary user's
+memory, not just their own.
+
 Also available: `POST /v1/chat` (recall → prompt with context → streamed Bedrock reply →
 persist the turn), `PUT /v1/memory/{id}` (supersede), `GET /v1/memory/{id}/history` (version
 chain), `DELETE /v1/memory/{id}`, `DELETE /v1/memory` (full GDPR erasure),
@@ -359,14 +382,23 @@ Stated plainly rather than hidden:
 - LoCoMo has been run on two conversations out of ten (304 of 1,986 questions). The oracle
   diagnostic now exists and says the answer model, not retrieval, is the ceiling — so the
   remaining eight conversations would sharpen the estimate without changing that conclusion.
-- **The frequency term in the score blend halves retrieval quality** (recall@5 0.384 → 0.183)
-  and nothing has been changed in response yet — the weights are still `0.5/0.3/0.2`. Cutting
-  the frequency weight is the single highest-value change available, and it is deliberately
-  left undone here because one synthetic benchmark shouldn't silently re-tune production
-  ranking. `--top-k 20` currently compensates for it.
-- **Graph expansion injects candidates at a hardcoded semantic score of 0.5**
-  (`memory_pipeline.py`), which outranks 43% of genuine semantic hits. It should carry a real
-  similarity score, or a calibrated penalty, rather than a constant.
+- **The frequency term in the score blend halves retrieval quality** (recall@5 0.384 → 0.183),
+  and the weights are still `0.5/0.3/0.2` — that number itself is deliberately left untouched,
+  because one synthetic benchmark shouldn't silently re-tune production ranking. What *has*
+  changed: `redis_client.bump_frequency` used to fire on every candidate the retriever
+  returned, before the `top_k` truncation — so memories pushed out by graph expansion and
+  never shown to anyone still counted as "retrieved". It now fires only on the memories that
+  survive truncation, so the counter means "this was actually returned" instead of "this was
+  a candidate." That's a fix to what the signal measures, not to the weight, and the benchmark
+  numbers above predate it — they'd need a re-run to reflect it. `--top-k 20` still compensates
+  for whatever gap remains.
+- **Graph expansion used to inject candidates at a hardcoded semantic score of 0.5**
+  (`memory_pipeline.py`), which outranked 43% of genuine semantic hits. It now batch-retrieves
+  each expanded candidate's stored vector from Qdrant and scores it by real cosine similarity
+  against the query, falling back to 0.5 only if a vector is unexpectedly missing. Also not yet
+  re-measured against the benchmark above.
+- **Prompt injection via stored memory content** — see "Prompt injection via stored memories"
+  under Security boundary. Fenced and sanitized, not eliminated; still the top open risk here.
 - **The eval is not reproducible run-to-run**: search increments retrieval-frequency counters,
   so the ranking function mutates as the benchmark uses it. Until the harness resets those
   counters per run, repeated measurements drift by roughly ±0.05 recall.

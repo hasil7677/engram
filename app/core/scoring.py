@@ -20,6 +20,13 @@ def normalized_frequency_score(raw_frequency: float, max_frequency: float) -> fl
     return min(raw_frequency / max_frequency, 1.0)
 
 
+def cosine_similarity(a: list[float], b: list[float]) -> float:
+    """Plain dot product, not divided by norms: app.core.embeddings.embed()
+    L2-normalizes every vector before it's stored or queried, so the norms are
+    already 1 and dividing by them would be a no-op."""
+    return sum(x * y for x, y in zip(a, b))
+
+
 def final_score(semantic_score: float, temporal_score: float, frequency_score: float) -> float:
     """Final Score = (semantic * w_sem) + (temporal_decay * w_temp) + (frequency * w_freq).
 

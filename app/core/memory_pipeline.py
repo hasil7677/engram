@@ -1,5 +1,6 @@
 import hashlib
 import logging
+import re
 from datetime import datetime, timezone
 
 from app.config import settings
@@ -174,7 +175,6 @@ def _search_memory(tenant_id: str, user_id: str, query: str, top_k: int, use_gra
         freq = scoring.normalized_frequency_score(freq_raw, max_freq)
         final = scoring.final_score(hit.score, temporal, freq)
 
-        redis_client.bump_frequency(tenant_id, user_id, memory_id)
         scored.append(
             ScoredMemory(
                 memory_id=memory_id,
@@ -193,18 +193,25 @@ def _search_memory(tenant_id: str, user_id: str, query: str, top_k: int, use_gra
     if use_graph_expansion and seed_ids:
         related = neo4j_client.expand_via_graph(tenant_id, user_id, seed_ids)
         log_access(tenant_id, user_id, "read", "neo4j", None, f"graph_expansion +{len(related)}")
+        # Expanded candidates come from Neo4j, not the Qdrant search, so they have no
+        # semantic score of their own — batch-fetch their stored vectors and score them
+        # against the query the same way a direct hit would be, instead of a constant.
+        related_vectors = qdrant_client.get_vectors([r["memory_id"] for r in related])
         for r in related:
             timestamp = datetime.fromisoformat(r["timestamp"])
             temporal = scoring.temporal_decay_score(timestamp)
             freq_raw = redis_client.get_frequency(tenant_id, user_id, r["memory_id"])
             freq = scoring.normalized_frequency_score(freq_raw, max_freq)
-            # no direct semantic score for graph-only hits — treat as a fixed mid-tier signal
-            final = scoring.final_score(0.5, temporal, freq)
+            related_vector = related_vectors.get(r["memory_id"])
+            # fixed mid-tier fallback only if the point vanished from Qdrant between
+            # the Neo4j read and this lookup — shouldn't happen, but not our invariant to break
+            semantic = scoring.cosine_similarity(vector, related_vector) if related_vector else 0.5
+            final = scoring.final_score(semantic, temporal, freq)
             scored.append(
                 ScoredMemory(
                     memory_id=r["memory_id"],
                     text=r["text"],
-                    semantic_score=0.5,
+                    semantic_score=semantic,
                     temporal_score=temporal,
                     frequency_score=freq,
                     final_score=final,
@@ -216,6 +223,12 @@ def _search_memory(tenant_id: str, user_id: str, query: str, top_k: int, use_gra
     scored.sort(key=lambda m: m.final_score, reverse=True)
     scored = scored[:top_k]
 
+    # Frequency should mean "this was actually returned to a caller", not "this was
+    # a candidate at some point" — bump only the survivors of top_k truncation, not
+    # every memory the retriever considered along the way.
+    for m in scored:
+        redis_client.bump_frequency(tenant_id, user_id, m.memory_id)
+
     context_string = build_context_string(scored)
     result = SearchResult(context_string=context_string, memories=scored)
 
@@ -223,12 +236,28 @@ def _search_memory(tenant_id: str, user_id: str, query: str, top_k: int, use_gra
     return result
 
 
+def _sanitize_for_prompt(text: str) -> str:
+    """Defence-in-depth against a stored memory hijacking the chat prompt's turn
+    structure: a memory containing a newline plus "User:"/"Assistant:" can forge
+    a fake turn boundary in CHAT_PROMPT_TEMPLATE, since that template has no other
+    delimiter between scaffolding and retrieved content. Flattening newlines closes
+    the multi-line half of that; breaking the "Role:" pattern closes the rest. This
+    doesn't stop injection generally — nothing here does — it only removes the one
+    structural trick that lets stored text impersonate a new turn.
+    """
+    flattened = " ".join(text.split())
+    return re.sub(r"(?i)\b(user|assistant|system)(\s*:)", r"\1_\2", flattened)
+
+
 def build_context_string(memories: list[ScoredMemory]) -> str:
     """Final output: a clean string ready to inject into an LLM prompt so the
-    assistant appears to have continuous memory."""
+    assistant appears to have continuous memory. Wrapped in a fence and instructed
+    as data, not instructions, in CHAT_PROMPT_TEMPLATE (see app/core/chat.py) —
+    mitigation, not a fix, for the injection risk documented in the README."""
     if not memories:
         return "No relevant memories found."
     lines = ["Relevant memories about this user (most relevant first):"]
     for m in memories:
-        lines.append(f"- [{m.timestamp.date()}] {m.text} (relevance={m.final_score:.2f})")
+        text = _sanitize_for_prompt(m.text)
+        lines.append(f"- [{m.timestamp.date()}] {text} (relevance={m.final_score:.2f})")
     return "\n".join(lines)

@@ -127,6 +127,23 @@ def find_semantic_candidates(
     ][: settings.contradiction_semantic_candidates]
 
 
+def get_vectors(memory_ids: list[str]) -> dict[str, list[float]]:
+    """Batch-fetches stored vectors by id, for scoring candidates (e.g. graph
+    expansion hits) that arrived without a semantic score of their own.
+    Ids come from Neo4j results already scoped to the caller's tenant/user, so
+    no additional payload filter is needed here."""
+    if not memory_ids:
+        return {}
+    client = get_qdrant()
+    points = client.retrieve(
+        collection_name=settings.qdrant_collection,
+        ids=memory_ids,
+        with_vectors=True,
+        with_payload=False,
+    )
+    return {str(p.id): p.vector for p in points if p.vector is not None}
+
+
 def get_memory(memory_id: str, tenant_id: str, user_id: str) -> dict | None:
     """Returns the point's payload if it belongs to this tenant/user, else None."""
     client = get_qdrant()
